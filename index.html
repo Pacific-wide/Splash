@@ -1,0 +1,2674 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>첨벙단 — 지금 들어갈 수 있는 수영장</title>
+<style>
+  :root{
+    --tile:#E6EEF0;--tile-2:#D6E3E6;--card:#fff;
+    --ink:#0B2A33;--ink-2:#456670;--ink-3:#8AA3AA;
+    --water:#0E7C86;--water-past:#B9DFE2;--lesson:#F4E4CC;
+    --rope:#E0952F;--coral:#C4553F;--line:#C9D9DC;--water-soft:#EAF4F6;
+    --mono:"SFMono-Regular",Menlo,Consolas,"Roboto Mono",monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--tile);
+    background-image:linear-gradient(var(--tile-2) 1px,transparent 1px),linear-gradient(90deg,var(--tile-2) 1px,transparent 1px);
+    background-size:46px 46px;
+    color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:0 0 60px}
+  .wrap{max-width:820px;margin:0 auto;padding:0 18px}
+  header{padding:34px 0 16px}
+  .brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  h1{font-size:34px;font-weight:800;letter-spacing:-.03em;margin:0}
+  h1 em{font-style:normal;color:var(--water)}
+  /* 물튀김 — 첨벙이라는 이름값. 장식은 이거 하나면 충분하다 */
+  .splash{width:36px;height:auto;align-self:center;flex:none}
+  .tag{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .sub{margin:12px 0 0;color:var(--ink);font-size:17px;font-weight:600;line-height:1.5;letter-spacing:-.01em}
+  .sub span{color:var(--ink-3);font-size:13px;font-weight:400}
+  /* 내 프로파일 스트립 — 첨벙단의 현관. "누구와"의 시작은 "내가 어디쯤인지"다.
+     왼쪽 = 라벨+칩, 오른쪽 = 동작 버튼. 맨몸 링크를 칩 사이에 흘리면 줄바꿈이 제멋대로 된다 */
+  .me{margin:16px 0 0;display:flex;align-items:center;justify-content:space-between;
+    gap:10px 16px;flex-wrap:wrap;
+    background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 14px}
+  .meinfo{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0}
+  .me .mlab{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase;white-space:nowrap}
+  .me .mhint{font-size:13.5px;color:var(--ink-2)}
+  .me .mtags{display:flex;gap:6px;flex-wrap:wrap}
+  .me .mtag{font-family:var(--mono);font-size:11.5px;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--ink-2)}
+  .me .mtag.g{border-color:var(--water);color:var(--water);font-weight:700}
+  .meacts{display:flex;gap:7px;flex-wrap:wrap;margin-left:auto}
+  .meacts a{font-size:12.5px;font-weight:600;color:var(--water);text-decoration:none;
+    border:1.5px solid var(--line);border-radius:999px;padding:6px 13px;white-space:nowrap;
+    transition:border-color .12s,background .12s}
+  .meacts a:hover{border-color:var(--water)}
+  .meacts a.pri{background:var(--water);border-color:var(--water);color:#fff}
+  .meacts a.pri:hover{background:#0B6A73}
+
+  .console{margin:22px 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .clockrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .clock{font-family:var(--mono);font-size:40px;font-weight:600;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+  .daybadge{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:5px 10px}
+  .live{margin-left:auto}
+  .live button{font-family:var(--mono);font-size:11px;letter-spacing:.08em;background:none;border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--ink-2);cursor:pointer}
+  .live button:hover{border-color:var(--water);color:var(--water)}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;margin:14px 0 4px;cursor:grab}
+  input[type=range]::-webkit-slider-runnable-track{height:6px;background:var(--tile-2);border-radius:3px}
+  input[type=range]::-moz-range-track{height:6px;background:var(--tile-2);border-radius:3px}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--water);border:3px solid #fff;box-shadow:0 0 0 1px var(--water);margin-top:-6px}
+  input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--water);border:3px solid #fff}
+  .scale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--ink-3)}
+  .filters{display:flex;gap:20px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+  .fgroup{display:flex;flex-direction:column;gap:7px}
+  .flabel{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{font-size:13px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink-2);cursor:pointer;transition:.12s}
+  .chip:hover{border-color:var(--water)}
+  .chip[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+  .chip:focus-visible,button:focus-visible{outline:2px solid var(--water);outline-offset:2px}
+
+  /* ── 수도권 지도 ────────────────────────────────────────────
+     지도 라이브러리 없이 행정경계를 인라인 SVG 로 그린다.
+     점을 누르면 아래 카드가 그 시설로 바뀐다 — 지도가 목록, 카드가 상세. */
+  .mapbox{margin:0 0 14px;background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px 12px;position:relative;overflow:hidden}
+  /* 컨트롤 기준은 지도여야 한다. .mapbox 는 범례·주석까지 감싸서
+     bottom:8px 이 지도 우하단이 아니라 카드 맨 아래가 된다. */
+  #mapview{position:relative}
+  .maphead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+  .maptitle{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .maploc{font-size:12px;color:var(--ink-2)}
+  .maploc b{color:var(--ink)}
+  .mapbtn{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.06em;background:none;
+    border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--ink-2);cursor:pointer}
+  .mapbtn:hover{border-color:var(--water);color:var(--water)}
+  /* touch-action:none 이라야 손가락 드래그를 지도가 가져간다.
+     대신 이 영역 위에서는 페이지가 안 스크롤되므로 "처음 위치" 버튼을 꼭 둔다. */
+  .mapsvg{display:block;width:100%;height:auto;touch-action:none;
+    background:#F7FAFB;border-radius:10px;cursor:grab}
+  .mapsvg.grabbing{cursor:grabbing}
+  .mapctl{position:absolute;right:8px;bottom:8px;display:flex;gap:4px;z-index:10}
+  .mapctl button{width:26px;height:26px;padding:0;border:1px solid var(--line);
+    background:rgba(255,255,255,.92);border-radius:7px;color:var(--ink-2);cursor:pointer;
+    font-family:var(--mono);font-size:13px;line-height:1;
+    display:flex;align-items:center;justify-content:center}
+  .mapctl button:hover{border-color:var(--water);color:var(--water)}
+  .mapctl button:disabled{opacity:.4;cursor:default}
+  .mapctl button.wide{width:auto;padding:0 9px;font-size:10.5px;letter-spacing:.04em}
+
+  /* 지도 위에는 글자를 두지 않는다. 이름은 올려놨을 때만 말풍선으로 나온다. */
+  /* nowrap 으로 두면 "…중이나 07:40에 입장 마감 · 다음 부 13:00" 같은 문장에서
+     말풍선이 지도보다 넓어져 양쪽이 잘린다. 폭을 묶고 줄바꿈을 허용한다. */
+  .maptip{position:absolute;z-index:20;pointer-events:none;
+    transform:translate(-50%,-100%);
+    /* width 를 안 주면 shrink-to-fit 이라 폭이 left 값에 따라 달라진다.
+       오른쪽 끝에서는 절반으로 접히고, offsetWidth 실측값도 같이 흔들린다. */
+    width:max-content;
+    max-width:min(250px,calc(100% - 24px));word-break:keep-all;
+    background:var(--ink);color:#fff;border-radius:9px;padding:8px 11px;
+    font-size:12.5px;line-height:1.45;
+    box-shadow:0 6px 20px rgba(11,42,51,.22);opacity:0;transition:opacity .12s}
+  .maptip.on{opacity:1}
+  .maptip::after{content:"";position:absolute;left:50%;top:100%;margin-left:-5px;
+    border:5px solid transparent;border-top-color:var(--ink)}
+  /* 위가 모자라면 커서 아래로 뒤집는다 (.mapbox 가 overflow:hidden 이라 그냥 두면 잘린다) */
+  .maptip.below{transform:translate(-50%,0)}
+  .maptip.below::after{top:auto;bottom:100%;
+    border-top-color:transparent;border-bottom-color:var(--ink)}
+  .maptip b{font-weight:700}
+  .maptip .tmeta{display:block;margin-top:2px;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.04em;color:rgba(255,255,255,.66)}
+  .maptip .tstate{display:inline-block;margin-top:5px;font-size:11px;font-weight:700;
+    padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.15)}
+  /* 범례의 점 색과 같은 언어를 쓴다. 두 상태만 회색이면 말이 끊긴다 */
+  .maptip .tstate.s-open{background:#2FB3BE;color:#02282C}
+  .maptip .tstate.s-toolate{background:var(--rope);color:#3A2405}
+  .maptip .tstate.s-soon{background:var(--water-past);color:#0B3238}
+  .maptip .tstate.s-unknown{background:#fff;color:var(--ink)}
+  .maptip .tstate.s-closed{background:rgba(255,255,255,.2)}
+
+  /* 땅 아래 옅은 그림자. 지도가 카드에서 살짝 떠 보인다 */
+  .drop{fill:var(--ink)}
+  .dhit{fill:transparent;cursor:default}
+  /* 블록. 두께는 전부 같고 입체감만 담당한다. 데이터는 색이 나른다 */
+  /* 옆면은 변마다 별도 path 라 stroke 를 주면 벽이 줄무늬로 쪼개진다 */
+  /* 지형은 마우스를 가로채지 않는다. 맨 위의 투명 .dhit 가 hover 를 받는다 */
+  .blk,.rim,.rim path,.river,.river-case,.drop{pointer-events:none}
+  /* 확대해도 선 굵기는 화면 기준으로 고정한다.
+     안 그러면 6배에서 서울 경계선이 38px, 한강이 30px 짜리 띠가 된다. */
+  .blk,.rim path,.river,.river-case{vector-effect:non-scaling-stroke}
+  .blk{stroke-linejoin:round}
+  /* viewBox 단위가 CSS px 와 1:1 이 아니라(데스크톱 1단위≈1.8px) 값을 그만큼 키웠다.
+     0.6 으로 두면 서브픽셀이라 같은 색 이웃 구 사이 경계가 뭉개진다. */
+  .blk.top{stroke:#fff;stroke-width:1}
+  .blk.side{stroke:none}
+  /* 시·도 경계. stroke 는 선 중심 정렬이라 바깥으로 나가는 건 절반뿐이고
+     안쪽 절반은 복원 패스가 덮는다 — 그래서 두께를 의도의 두 배로 준다.
+     색은 --ink 고정: 청록 계열로 잡으면 진한 블록(n4) 옆에서 대비 1.08:1 로 사라진다. */
+  .rim{stroke-linejoin:round;stroke-linecap:round}
+  .rim-seoul path{fill:var(--ink);stroke:var(--ink);stroke-width:11}
+  /* opacity 는 반드시 그룹에. path 마다 걸면 구가 만나는 분기점에서
+     알파가 겹쳐(.72 → .92) 테두리에 진한 점이 8~10개 생긴다 */
+  .rim-incheon{opacity:.72}
+  .rim-incheon path{fill:var(--ink);stroke:var(--ink);stroke-width:7.5}
+  /* 한강. 방향을 잡는 가장 큰 단서다.
+     밝은 심 하나로는 램프 양 끝을 동시에 못 만족한다(n1 위에서 대비 1.03:1).
+     어두운 케이싱을 깔아 밝은 구·진한 구 어디서든 읽히게 한다. */
+  .river-case{fill:none;stroke:var(--ink);stroke-width:8.5;stroke-linejoin:round;stroke-linecap:round}
+  .river{fill:none;stroke:#9ED6EC;stroke-width:5;stroke-linejoin:round;stroke-linecap:round}
+  /* 열린 수는 오직 색으로 말한다. 블록 두께는 전부 같다.
+     bg=수영장 없음 · has=있지만 지금 닫힘 · n1~n4=지금 열린 수 */
+  /* 밝기(L*)를 95.5·85.9·76.2·66.6·56.9·47.3 으로 등간격에 맞췄다.
+     첫 칸("없음"↔"닫힘")이 좁으면 흰 카드 위에서 그 둘만 구분이 안 된다. */
+  .blk.bg.top{fill:#EEF3F4}      .blk.bg.side{fill:#C6D5D8}
+  .blk.has.top{fill:#C9DCE0}     .blk.has.side{fill:#9DB8BD}
+  .blk.n1.top{fill:#93C7CD}      .blk.n1.side{fill:#6BA1A8}
+  .blk.n2.top{fill:#5BAFB8}      .blk.n2.side{fill:#3E8B94}
+  .blk.n3.top{fill:#2C949E}      .blk.n3.side{fill:#1C6E77}
+  .blk.n4.top{fill:#0E7C86}      .blk.n4.side{fill:#08535A}
+  /* 청록 글자를 청록 블록 위에 얹으면 안 읽힌다 (n2 배경에서 대비 2.4:1) */
+  .stem{stroke:var(--ink-2);stroke-width:1;opacity:.5}
+  .shadow{fill:rgba(11,42,51,.28)}
+  .mdot.on .stem{opacity:.85;stroke-width:1.3}
+  /* 기준점 마커는 장식이다. 포인터를 먹으면 그 자리에 겹친 수영장을 못 누른다
+     (과천시민회관은 기준점과 좌표가 같아 정확히 이 문제가 났다) */
+  /* 헤더의 .me(프로파일 스트립)와 이름이 겹치면 스트립이 pointer-events:none 을
+     상속받아 통째로 클릭 불능이 된다 — 마커는 mepin 으로 부른다 */
+  .mepin{fill:var(--coral);pointer-events:none}
+  .memark .hit{fill:transparent;stroke:none;cursor:default}
+  .mdot{cursor:pointer}
+  .mdot circle{stroke:#fff;stroke-width:1.3;transition:r .12s}
+  .mdot .hit{fill:transparent;stroke:none}
+  /* 지도가 좁을수록 같은 반지름이 더 작은 px 가 된다. 손가락에는 46px 는 줘야 한다 */
+  @media (pointer:coarse){ .mdot .hit{r:16} }
+  .mdot:hover .pin,.mdot:focus-visible .pin{stroke:var(--ink);stroke-width:1.8}
+  .mdot.on .pin{stroke:var(--ink);stroke-width:1.8}
+  .mdot:focus{outline:none}
+  /* 선택된 곳만 물결이 퍼진다 — 이름을 안 써도 어디를 보고 있는지 알 수 있다 */
+  /* `.mdot circle` 보다 특이도가 높아야 흰 stroke 를 이긴다.
+     transform-box 를 fill-box 로 두지 않으면 원 중심이 아니라 viewBox 중심이 기준이 된다.
+     r 을 직접 애니메이션하면 구형 Firefox 가 무시하므로 scale 을 쓴다. */
+  .mdot .ripple{fill:none;stroke:var(--water);stroke-width:1.6;
+    transform-box:fill-box;transform-origin:center;vector-effect:non-scaling-stroke;
+    animation:rip 2.4s ease-out infinite}
+  @keyframes rip{
+    0%{transform:scale(1);opacity:.5}
+    100%{transform:scale(2.4);opacity:0}
+  }
+  @media (prefers-reduced-motion:reduce){.mdot .ripple{animation:none;opacity:.35}}
+  .d-open{fill:var(--water)}
+  .d-toolate{fill:var(--rope)}
+  .mdot .d-unknown{fill:#fff;stroke:var(--ink-3);stroke-dasharray:2 2}
+  .d-soon{fill:var(--water-past)}
+  .d-closed{fill:var(--tile-2)}
+
+  /* 지도가 목록이고 카드가 상세다. 27곳을 카드로 쌓으면 아무도 안 읽는다. */
+  .picker{display:grid;gap:0;margin:0 0 12px;background:var(--card);border:1px solid var(--line);
+    border-radius:12px;overflow:hidden;max-height:236px;overflow-y:auto}
+  .prow{display:flex;align-items:baseline;gap:9px;padding:9px 13px;border-bottom:1px solid var(--line);
+    font-size:13px;cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;
+    text-align:left;width:100%;font-family:inherit;color:inherit}
+  .prow:last-child{border-bottom:none}
+  .prow:hover{background:var(--tile)}
+  .prow{-webkit-appearance:none;margin:0}
+  .prow[aria-pressed=true]{background:var(--ink);color:#fff}
+  .prow[aria-pressed=true] .pcity,.prow[aria-pressed=true] .pstat{color:rgba(255,255,255,.72)}
+  .pmark{width:8px;height:8px;border-radius:50%;flex-shrink:0;align-self:center}
+  .pname{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pcity{font-family:var(--mono);font-size:10px;color:var(--ink-3);flex-shrink:0}
+  .pstat{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-2);flex-shrink:0}
+  .maplegend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;font-family:var(--mono);font-size:10px;color:var(--ink-3)}
+  .maplegend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+  .mapnote{margin-top:7px;font-size:11px;color:var(--ink-3);line-height:1.5}
+
+  .summary{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--ink-2);margin:0 0 14px}
+  .summary b{color:var(--water);font-size:15px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--water)}
+  .card.partial::before{background:var(--rope)}
+  .card.unknown{border-style:dashed}
+  .card.unknown::before{background:repeating-linear-gradient(180deg,var(--ink-3) 0 4px,transparent 4px 8px)}
+  .ubadge{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding:4px 9px;border-radius:999px;background:var(--tile);color:var(--ink-2);border:1px solid var(--line);white-space:nowrap}
+  .ubadge.late{color:var(--rope);border-color:var(--rope);background:#fff}
+  .card.late::before{background:var(--rope)}
+  .card.shut::before{background:var(--tile-2)}
+  .card.shut .cname{color:var(--ink-2)}
+  .card.late .cname{color:var(--ink-2)}
+  .actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .act{font-size:13px;padding:9px 15px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-family:inherit}
+  .act.primary{background:var(--ink);border-color:var(--ink);color:#fff}
+  .act:hover{border-color:var(--water)}
+  .act.primary:hover{background:var(--water);border-color:var(--water)}
+  .chead{display:flex;align-items:flex-start;gap:12px}
+  .cname{font-size:17px;font-weight:700;letter-spacing:-.01em;margin:0}
+  .cmeta{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:4px;letter-spacing:.04em}
+  .remain{margin-left:auto;text-align:right;flex-shrink:0}
+  .rnum{font-family:var(--mono);font-size:27px;font-weight:600;color:var(--water);line-height:1;font-variant-numeric:tabular-nums}
+  .rnum span{font-size:12px;font-weight:500}
+  .rwin{font-family:var(--mono);font-size:11px;color:var(--ink-2);margin-top:4px;font-variant-numeric:tabular-nums}
+
+  /* 막대는 위에서 내려다본 레인 하나다.
+     세로 눈금은 레인 로프의 부표 간격을 빌린 1시간 눈금 — 축 라벨을 덜 읽어도 시각이 짚인다. */
+  .lane{position:relative;height:30px;border-radius:6px;border:1px solid var(--line);
+    background-color:var(--tile);
+    background-image:linear-gradient(90deg,rgba(11,42,51,.12) 0 1px,transparent 1px);
+    background-size:calc(100% / 24) 100%}
+  .lanewrap{position:relative;margin:26px 0 6px}
+  .seg{position:absolute;top:5px;bottom:5px;border-radius:3px}
+  .seg.lesson{background:var(--lesson)}
+  .seg.open{background:var(--water-past)}
+  .seg.live{background:var(--water)}
+  .seg.part{background:repeating-linear-gradient(45deg,var(--water-past) 0 5px,#fff 5px 10px);border:1px solid var(--water-past)}
+  .seg.live.part{background:repeating-linear-gradient(45deg,var(--water) 0 5px,#7FC6CB 5px 10px);border:none}
+  .seg.locked{background:var(--tile-2);border:1px dashed var(--ink-3);opacity:.7}
+  /* 배영 깃발. 실제 수영장에선 벽 5m 앞에 걸어 "곧 끝난다"를 알린다.
+     여기서는 입장 마감 이후 구간 위에 걸어 "지금 가면 못 들어간다"를 알린다. */
+  /* 20분 구간은 하루 막대에서 1.4%밖에 안 된다. 모바일에선 4px — 대시가 한 개도 안 들어간다.
+     주기를 3px로 줄이고 최소 폭을 준다. */
+  .seg.deadline{top:2px;bottom:auto;height:6px;border-radius:0;z-index:5;min-width:12px;
+    background:repeating-linear-gradient(90deg,var(--rope) 0 1.5px,transparent 1.5px 3px);
+    border-bottom:1px solid rgba(224,149,47,.55)}
+  .flaglab{position:absolute;top:-19px;transform:translateX(-50%);white-space:nowrap;
+    font-family:var(--mono);font-size:10px;color:var(--rope);letter-spacing:.02em}
+  .capmark{position:absolute;top:3px;bottom:3px;width:1px;background:rgba(255,255,255,.85);z-index:3}
+  .now{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--coral);z-index:6}
+  .now::after{content:"";position:absolute;top:-4px;left:-3px;width:8px;height:8px;border-radius:50%;background:var(--coral)}
+  .laneaxis{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--ink-3);letter-spacing:.05em}
+  .legend{display:flex;gap:13px;margin-top:9px;font-family:var(--mono);font-size:10px;color:var(--ink-3);flex-wrap:wrap}
+  .legend i{display:inline-block;width:14px;height:6px;border-radius:2px;margin-right:5px;vertical-align:middle}
+
+  .rows{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;display:grid;gap:7px}
+  .row{display:flex;gap:10px;font-size:13px;line-height:1.5}
+  .rk{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);width:60px;flex-shrink:0;padding-top:3px}
+  .rv{color:var(--ink-2)}
+  .rv b{color:var(--ink);font-variant-numeric:tabular-nums}
+  .up{color:var(--coral);font-family:var(--mono);font-size:11px}
+  .warn{color:var(--rope);font-family:var(--mono);font-size:11px}
+  .fresh{display:flex;align-items:center;gap:7px;margin-top:12px;font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--ink-3)}
+  .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+  .dot.confirmed{background:var(--water)}.dot.unverified{background:var(--rope)}.dot.stale{background:var(--coral)}
+
+  .empty{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 20px;text-align:center}
+  .empty .lane{margin:0 0 16px}
+  .empty h3{margin:0 0 6px;font-size:16px}
+  .empty p{margin:0;color:var(--ink-2);font-size:13px;line-height:1.6}
+
+  footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-3);line-height:1.7}
+  footer b{color:var(--ink-2)}
+  /* ── 탭 — 지도부터 첨벙 모으기까지 한 페이지에서 ─────────────────────────── */
+  .tabs{display:flex;gap:4px;margin:18px 0 0;border-bottom:2px solid var(--line)}
+  .tab{font-family:inherit;font-size:14.5px;font-weight:700;color:var(--ink-3);text-decoration:none;
+    padding:9px 14px;border-bottom:2px solid transparent;margin-bottom:-2px}
+  .tab:hover{color:var(--water)}
+  .tab.on{color:var(--water);border-bottom-color:var(--water)}
+  section[hidden]{display:none}
+
+  /* ── 서브뷰(프로파일·모으기) 공용 — 전부 .sv 아래에 가둔다.
+        단일 파일에서 클래스는 전역이다. 지도 쪽 .chip/.warn 과 부딪히지 않게. ── */
+  .sv{max-width:640px;margin:0 auto;padding:6px 0 0}
+  .sv .svsub{margin:14px 0 0;color:var(--ink-2);font-size:14px;line-height:1.6}
+  .sv .svsub b{color:var(--ink)}
+  .sv .bar{height:3px;background:var(--tile-2);border-radius:2px;margin:14px 0 0;overflow:hidden}
+  .sv .bar i{display:block;height:100%;background:var(--water);width:0;transition:width .32s cubic-bezier(.4,0,.2,1)}
+  .sv .chat{margin:16px 0 0;display:flex;flex-direction:column;gap:11px}
+  .sv .msg{max-width:84%;padding:12px 15px;border-radius:16px;font-size:15px;line-height:1.58;
+    animation:svrise .34s cubic-bezier(.2,.8,.3,1) both}
+  .sv .msg.q{background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px;align-self:flex-start}
+  .sv .msg.a{background:var(--water);color:#fff;border-bottom-right-radius:5px;align-self:flex-end;font-weight:600}
+  .sv .msg .mhint2{display:block;margin-top:6px;font-size:12.5px;color:var(--ink-3);line-height:1.5}
+  .sv .msg.a .mhint2{color:rgba(255,255,255,.75)}
+  @keyframes svrise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+  .sv .dots{align-self:flex-start;display:flex;gap:4px;padding:14px 15px;background:var(--card);
+    border:1px solid var(--line);border-radius:16px;border-bottom-left-radius:5px}
+  .sv .dots i{width:6px;height:6px;border-radius:50%;background:var(--ink-3);animation:svblink 1.1s infinite}
+  .sv .dots i:nth-child(2){animation-delay:.18s}.sv .dots i:nth-child(3){animation-delay:.36s}
+  @keyframes svblink{0%,60%,100%{opacity:.28}30%{opacity:1}}
+  @media (prefers-reduced-motion:reduce){.sv .msg{animation:none}.sv .dots i{animation:none;opacity:.5}.sv .bar i{transition:none}}
+  .sv .ask{margin:16px 0 0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+  .sv .opts{display:flex;flex-wrap:wrap;gap:8px}
+  .sv .opt{font-family:inherit;font-size:14.5px;font-weight:600;color:var(--ink);background:#fff;
+    border:1.5px solid var(--line);border-radius:11px;padding:11px 14px;cursor:pointer;
+    text-align:left;line-height:1.35;transition:border-color .12s,background .12s}
+  .sv .opt:hover{border-color:var(--water);color:var(--water)}
+  .sv .opt:focus-visible{outline:2px solid var(--water);outline-offset:2px}
+  .sv .opt.on{border-color:var(--water);background:var(--water-soft);color:var(--water)}
+  .sv .opt small{display:block;font-weight:400;font-size:12px;color:var(--ink-3);margin-top:2px}
+  .sv .opt.on small{color:var(--water)}
+  .sv .opt.skip{border-style:dashed;color:var(--ink-3);font-weight:500}
+  .sv .opt.skip:hover{border-color:var(--ink-3);color:var(--ink-2)}
+  .sv .timein{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .sv .timein input{font-family:var(--mono);font-size:22px;font-weight:600;width:66px;text-align:center;
+    border:1.5px solid var(--line);border-radius:10px;padding:9px 4px;color:var(--ink);background:#fff}
+  .sv .timein input:focus{outline:none;border-color:var(--water)}
+  .sv .timein span{font-family:var(--mono);font-size:19px;color:var(--ink-3)}
+  .sv .go{font-family:inherit;font-size:14.5px;font-weight:700;background:var(--water);color:#fff;
+    border:none;border-radius:11px;padding:12px 20px;cursor:pointer;margin-left:auto}
+  .sv .go:disabled{background:var(--tile-2);color:var(--ink-3);cursor:not-allowed}
+  .sv .poolwrap{max-height:270px;overflow:auto;margin:0 -4px;padding:0 4px}
+  .sv .pool{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#fff;
+    border:1.5px solid var(--line);border-radius:11px;padding:10px 12px;cursor:pointer;
+    font-family:inherit;font-size:14.5px;color:var(--ink);margin-bottom:7px}
+  .sv .pool:hover{border-color:var(--water)}
+  .sv .pool.on{border-color:var(--water);background:var(--water-soft)}
+  .sv .pool b{font-weight:600;flex:1;letter-spacing:-.01em}
+  .sv .pool .km{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+  .sv .pool.on .km{color:var(--water)}
+  .sv .pool .box{width:17px;height:17px;border:1.5px solid var(--line);border-radius:5px;flex:none}
+  .sv .pool.on .box{border-color:var(--water);background:var(--water);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' stroke='%23fff' stroke-width='2.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+  .sv .search{width:100%;font-family:inherit;font-size:14.5px;border:1.5px solid var(--line);
+    border-radius:11px;padding:10px 12px;margin-bottom:9px;color:var(--ink)}
+  .sv .search:focus{outline:none;border-color:var(--water)}
+  .sv .result{margin:18px 0 0;background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:20px;animation:svrise .4s cubic-bezier(.2,.8,.3,1) both}
+  .sv .gradebig{display:flex;align-items:center;gap:15px}
+  .sv .gletter{font-family:var(--mono);font-size:52px;font-weight:700;line-height:1;color:var(--water);
+    border:3px solid var(--water);border-radius:16px;width:84px;height:84px;
+    display:flex;align-items:center;justify-content:center;flex:none}
+  .sv .gletter.unk{color:var(--ink-3);border-color:var(--line);border-style:dashed;font-size:15px;
+    font-weight:600;letter-spacing:.02em}
+  .sv .gwhy{font-size:14px;line-height:1.6;color:var(--ink-2)}
+  .sv .gwhy b{color:var(--ink);font-weight:700}
+  .sv .conf{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+    border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--ink-3);margin-top:7px}
+  .sv .conf.verified{border-color:var(--water);color:var(--water)}
+  .sv .conf.self{border-color:var(--ink-3)}
+  .sv .conf.derived,.sv .conf.unknown{border-style:dashed}
+  .sv .facts{margin:17px 0 0;border-top:1px solid var(--line);padding-top:15px;
+    display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:13.5px;align-items:baseline}
+  .sv .facts dt{color:var(--ink-3);font-family:var(--mono);font-size:11px;letter-spacing:.05em;white-space:nowrap}
+  .sv .facts dd{margin:0;color:var(--ink);font-weight:600;letter-spacing:-.01em}
+  .sv .facts dd.none{color:var(--ink-3);font-weight:400}
+  .sv .note{margin:15px 0 0;font-size:13px;line-height:1.6;color:var(--ink-2);
+    background:var(--water-soft);border-radius:10px;padding:12px 14px}
+  .sv .note b{color:var(--water)}
+  .sv .acts{margin:15px 0 0;display:flex;gap:8px;flex-wrap:wrap}
+  .sv .acts button{font-family:inherit;font-size:13.5px;font-weight:600;border-radius:10px;
+    padding:10px 15px;cursor:pointer;border:1.5px solid var(--line);background:#fff;color:var(--ink-2)}
+  .sv .acts button:hover{border-color:var(--water);color:var(--water)}
+  .sv .acts button.pri{background:var(--water);border-color:var(--water);color:#fff}
+  .sv .json{margin:13px 0 0;font-family:var(--mono);font-size:11px;line-height:1.55;color:var(--ink-2);
+    background:#F4F8F9;border:1px solid var(--line);border-radius:10px;padding:12px;
+    max-height:230px;overflow:auto;white-space:pre;display:none}
+  .sv .json.on{display:block}
+  /* 모으기 전용 */
+  .sv .mcard{margin:16px 0 0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .sv .mcard h2{font-size:13px;margin:0 0 10px;font-family:var(--mono);letter-spacing:.08em;color:var(--ink-3);font-weight:600}
+  .sv .mtag{font-family:var(--mono);font-size:11.5px;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--ink-2)}
+  .sv .mtag.g{border-color:var(--water);color:var(--water);font-weight:700}
+  .sv .mtags{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .sv .mchips{display:flex;gap:7px;flex-wrap:wrap}
+  .sv .mchip{font-family:inherit;font-size:14px;font-weight:600;background:#fff;color:var(--ink);
+    border:1.5px solid var(--line);border-radius:10px;padding:9px 13px;cursor:pointer;line-height:1.3}
+  .sv .mchip:hover{border-color:var(--water);color:var(--water)}
+  .sv .mchip.on{border-color:var(--water);background:var(--water-soft);color:var(--water)}
+  .sv .mchip small{display:block;font-weight:400;font-size:11.5px;color:var(--ink-3)}
+  .sv .mchip.on small{color:var(--water)}
+  .sv .hint{font-size:13px;color:var(--ink-3);line-height:1.55;margin:9px 0 0}
+  .sv .alert{font-size:13px;color:var(--coral);line-height:1.55;margin:9px 0 0}
+  .sv .manual{display:flex;align-items:center;gap:7px;margin-top:10px}
+  .sv .manual input{font-family:var(--mono);font-size:17px;width:58px;text-align:center;
+    border:1.5px solid var(--line);border-radius:9px;padding:8px 4px;color:var(--ink)}
+  .sv .manual input:focus{outline:none;border-color:var(--water)}
+  .sv .manual span{color:var(--ink-3);font-size:12.5px}
+  .sv .preview{font-size:14.5px;line-height:1.75;background:#F4F8F9;border:1px solid var(--line);
+    border-radius:11px;padding:14px 16px;white-space:pre-wrap;word-break:break-word;font-family:inherit}
+  .sv .cta{display:inline-block;margin-top:10px;font-size:14px;font-weight:700;color:#fff;
+    background:var(--water);border-radius:10px;padding:11px 16px;text-decoration:none}
+  .sv .draft{display:flex;align-items:baseline;gap:10px;border-top:1px solid var(--line);
+    padding:10px 2px;font-size:13.5px}
+  .sv .draft:first-of-type{border-top:none}
+  .sv .draft b{font-weight:600}
+  .sv .draft .dm{font-family:var(--mono);font-size:11.5px;color:var(--ink-3)}
+  .sv .draft button{margin-left:auto;font-family:inherit;font-size:12px;border:none;background:none;
+    color:var(--ink-3);cursor:pointer}
+  .sv .draft button:hover{color:var(--coral)}
+  /* 내 카드 */
+  .sv .cardhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px}
+  .sv .cardhead .big{font-family:var(--mono);font-size:34px;font-weight:700;color:var(--water);letter-spacing:.02em}
+  .sv .cardhead .big.unk{color:var(--ink-3);font-size:16px;font-weight:600}
+  .sv .cardhead .who{font-size:13.5px;color:var(--ink-2);line-height:1.5}
+  .sv .hexwrap{display:flex;justify-content:center;margin-top:6px}
+  .sv .hexwrap svg{max-width:360px;width:100%;height:auto}
+  .sv .hexgrid{fill:none;stroke:var(--tile-2);stroke-width:1}
+  .sv .hexspoke{stroke:var(--tile-2);stroke-width:1}
+  .sv .hexspoke.unk{stroke-dasharray:3 3;stroke:var(--ink-3);opacity:.5}
+  .sv .hexpoly{fill:var(--water);fill-opacity:.16;stroke:var(--water);stroke-width:2;stroke-linejoin:round}
+  .sv .hexdot{fill:var(--water)}
+  .sv .hexstem{stroke:var(--water);stroke-width:2.5;stroke-linecap:round;opacity:.5}
+  .sv .hexlab{font-family:var(--sans);font-size:11.5px;font-weight:700;fill:var(--ink)}
+  .sv .hexlab.unk{fill:var(--ink-3);font-weight:400}
+  .sv .hexval{font-family:var(--mono);font-size:9.5px;fill:var(--ink-3)}
+  .sv .gradelane svg{width:100%;height:auto}   /* 지도 뷰의 .lanewrap 과 이름을 가른다 */
+  .sv .laneband{fill:var(--tile-2);opacity:.45}
+  .sv .laneband.on{fill:var(--water);opacity:.18}
+  .sv .lanetick{font-family:var(--mono);font-size:11px;fill:var(--ink-3)}
+  .sv .lanetick.on{fill:var(--water);font-weight:700}
+  .sv .lanename{font-family:var(--sans);font-size:10.5px;fill:var(--ink-3)}
+  .sv .lanerope{stroke:var(--rope);stroke-width:2;stroke-dasharray:7 5;opacity:.55}
+  .sv .laneme{fill:var(--water);stroke:#fff;stroke-width:2}
+  .sv .laneme.derived{stroke-dasharray:2 2;stroke:var(--water);fill:#fff}
+  .sv .axisbar{display:grid;grid-template-columns:86px 1fr 86px;gap:9px;align-items:center;margin-top:11px}
+  .sv .axisbar .al,.sv .axisbar .ar{font-size:12px;color:var(--ink-2);line-height:1.35}
+  .sv .axisbar .al{text-align:right}
+  .sv .axisbar .al b,.sv .axisbar .ar b{font-size:14px;color:var(--ink)}
+  .sv .axisbar.dim .al b,.sv .axisbar.dim .ar b{color:var(--ink-3)}
+  .sv .track{position:relative;height:6px;background:var(--tile-2);border-radius:3px}
+  .sv .track i{position:absolute;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;
+    border-radius:50%;background:var(--water);border:2.5px solid #fff;box-shadow:0 0 0 1px var(--water)}
+  .sv .track i.half{background:#fff;box-shadow:0 0 0 1px var(--ink-3);border-color:#fff}
+  .sv .track .mid{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--line)}
+  .sv .cardnote{margin:13px 0 0;font-size:12.5px;line-height:1.6;color:var(--ink-3)}
+
+  @media (max-width:560px){
+    h1{font-size:27px}.clock{font-size:33px}.splash{width:30px}
+    .remain{margin-left:0;text-align:left;width:100%;margin-top:8px;display:flex;align-items:baseline;gap:10px}
+    .rwin{margin-top:0}.chead{flex-wrap:wrap}.rk{width:56px}
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1><em>첨벙</em>단</h1>
+      <svg class="splash" viewBox="0 0 44 30" aria-hidden="true">
+        <path d="M5 26 Q13 19 22 26 Q31 19 39 26" fill="none" stroke="var(--water)" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="12" cy="11" r="2.6" fill="var(--water)"/>
+        <circle cx="22" cy="5" r="3.4" fill="var(--water)"/>
+        <circle cx="32" cy="12" r="2.2" fill="var(--water)"/>
+      </svg>
+      <span class="tag">수집 목록 불러오는 중…</span>
+    </div>
+    <p class="sub">지금 들어갈 수 있는 수영장,<br>같이 들어갈 사람.<br><span>모르는 건 모른다고 씁니다.</span></p>
+    <div class="me">
+      <div class="meinfo">
+        <span class="mlab">내 프로파일</span>
+        <span id="mebody" class="mhint">…</span>
+      </div>
+      <div class="meacts" id="meacts"></div>
+    </div>
+    <nav class="tabs" aria-label="화면 전환">
+      <a class="tab on" href="#map" data-v="map">수영장 지도</a>
+      <a class="tab" href="#profile" data-v="profile">프로파일</a>
+      <a class="tab" href="#card" data-v="card">내 카드</a>
+      <a class="tab" href="#match" data-v="match">첨벙 모으기</a>
+    </nav>
+  </header>
+  <script>
+  // 프로파일이 있으면 첫 화면에서 바로 보인다 — "누구와"의 축이 여기 산다.
+  // 값은 이 브라우저의 localStorage 에서만 온다. 프로파일 탭이 저장을 마치면 다시 부른다.
+  function renderMeStrip(){
+    var el=document.getElementById("mebody"), ac=document.getElementById("meacts");
+    var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});};
+    var p=null;
+    try{ p=JSON.parse(localStorage.getItem("cbd.profile")); }catch(_){}
+    // 동작 버튼은 매번 통째로 다시 그린다 — 상태별로 링크를 갈아끼우다 보면
+    // 낡은 링크가 남는다 (이전에 실제로 그랬다). 주 동작 하나 + 보조 하나, 최대 둘.
+    if(!p||typeof p!=="object"){
+      el.className="mhint";
+      el.textContent="아직 없어요 — 등급이랑 수영 유형이 나옵니다.";
+      ac.innerHTML='<a class="pri" href="#profile">3분이면 나와요 →</a>';
+      return;
+    }
+    var t=[];
+    t.push('<span class="mtag g">'+(p.grade&&p.grade!=="unknown"
+      ? esc(p.grade+(p.grade_step||"")) : "등급 미확인")+'</span>');
+    if(p.volume) t.push('<span class="mtag">'+esc(p.volume)+'</span>');
+    if(p.type_code) t.push('<span class="mtag">'+esc(p.type_code)+'</span>');
+    if(p.social_tag) t.push('<span class="mtag">'+esc(p.social_tag)+'</span>');
+    el.className="mtags"; el.innerHTML=t.join("");
+    // 칩(V2·長健計…)은 압축이라 낯설다 — 풀어 그린 카드가 목적지다
+    ac.innerHTML=(p.type_code
+      ? '<a class="pri" href="#card">내 카드 →</a>'
+      : '<a class="pri" href="#profile">유형 이어하기 →</a>')
+      +'<a href="#match">첨벙 모으기 →</a>';
+  }
+  renderMeStrip();
+  </script>
+
+  <section id="view-map">
+  <div class="console">
+    <div class="clockrow">
+      <div class="clock" id="clock">--:--</div>
+      <div class="daybadge" id="daybadge">–</div>
+      <div class="live"><button id="reset" type="button">지금으로</button></div>
+    </div>
+    <input type="range" id="scrub" min="0" max="1435" step="5" aria-label="시각 이동">
+    <div class="scale"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div>
+    <div class="filters">
+      <div class="fgroup"><span class="flabel">요일</span><div class="chips" id="dayChips"></div></div>
+      <div class="fgroup"><span class="flabel">거주</span><div class="chips" id="resChips">
+        <button class="chip" data-res="in" type="button">관내</button>
+        <button class="chip" data-res="out" type="button">관외</button></div></div>
+      <div class="fgroup"><span class="flabel">이용 자격</span><div class="chips" id="memChips">
+        <button class="chip" data-mem="day" type="button">일일입장</button>
+        <button class="chip" data-mem="monthly" type="button">월정기</button>
+        <button class="chip" data-mem="lesson" type="button">강습회원</button></div></div>
+    </div>
+  </div>
+
+  <div class="mapbox">
+    <div class="maphead">
+      <span class="maptitle">수도권 지도</span>
+      <span class="maploc" id="maploc">기준점 불러오는 중…</span>
+      <button class="mapbtn" id="locbtn" type="button">내 위치로 맞추기</button>
+    </div>
+    <!-- 버튼은 #mapwrap 밖에 둔다. 안에 두면 render 때 innerHTML 로 날아간다 -->
+    <div id="mapview">
+      <div id="mapwrap"></div>
+      <div class="mapctl">
+        <button id="zout" type="button" aria-label="축소">−</button>
+        <button id="zin" type="button" aria-label="확대">+</button>
+        <button id="zreset" type="button" class="wide">처음 위치</button>
+      </div>
+    </div>
+    <!-- 핀에 aria-label 이 이미 있어 live region 으로 두면 이중 낭독이 된다 -->
+    <div class="maptip" id="maptip" aria-hidden="true"></div>
+    <div class="maplegend">
+      <span><i style="background:var(--water)"></i>입수 가능</span>
+      <span><i style="background:var(--rope)"></i>입장 마감</span>
+      <span><i style="background:#fff;border:1px dashed var(--ink-3)"></i>미확인</span>
+      <span><i style="background:var(--water-past)"></i>곧 열림</span>
+      <span><i style="background:var(--tile-2)"></i>휴관·종료</span>
+      <span>구 색 = 지금 열린 곳 0<i style="background:#C9DCE0;border-radius:2px;margin:0 0 0 5px"></i><i style="background:#93C7CD;border-radius:2px;margin:0"></i><i style="background:#5BAFB8;border-radius:2px;margin:0"></i><i style="background:#2C949E;border-radius:2px;margin:0"></i><i style="background:#0E7C86;border-radius:2px;margin:0 5px 0 0"></i>4곳 이상</span>
+      <span><i style="background:#EEF3F4;border-radius:2px;border:1px solid var(--line)"></i>수영장 없는 구</span>
+      <span><i style="background:#9ED6EC;border-radius:1px;height:3px;outline:1px solid var(--ink)"></i>한강</span>
+      <span><i style="background:var(--ink);border-radius:1px;height:3px"></i>서울시 · 인천(수집 구) 경계</span>
+    </div>
+    <p class="mapnote" id="mapnote"></p>
+  </div>
+
+  <p class="summary" id="summary"></p>
+  <div class="picker" id="picker" aria-label="수영장 목록"></div>
+  <div id="detail"></div>
+
+  <footer>
+    <b>첨벙단 프로토타입입니다.</b> 각 시설 운영기관이 공개한 페이지를 사람이 읽고 옮긴 값입니다 — 출처와 확인 날짜는 카드마다 적어 뒀습니다.
+    시간표가 공개되지 않은 시설은 추측으로 채우지 않고 <b>미확인</b>으로 남기고, 대신 전화번호를 함께 띄웁니다.
+    <b>정원·실시간 여석은 알 수 없습니다.</b> <span id="originNote"></span>방문 전 시설에 확인하세요.
+  </footer>
+  </section>
+
+  <section id="view-profile" class="sv" hidden>
+    <p class="svsub">같이 들어갈 사람을 찾기 전에, 내가 어디쯤인지부터.<br>
+      몇 가지만 물어볼게요. <b>모르는 건 모른다고 하면 됩니다</b> — 다른 걸 물어볼게요.</p>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="chat" id="chat"></div>
+    <div class="ask" id="ask" hidden></div>
+    <div id="out"></div>
+    <div id="out2"></div>
+    <p class="hint" style="margin-top:20px">답한 내용은 이 브라우저에만 저장됩니다. 서버로 보내지 않습니다.</p>
+  </section>
+
+  <section id="view-card" class="sv" hidden>
+    <div id="cardapp"></div>
+  </section>
+
+  <section id="view-match" class="sv" hidden>
+    <p class="svsub">수영장과 시간을 고르면 <b>모집 글</b>을 만들어 드립니다.
+      단톡방이나 수영 커뮤니티에 붙여넣으세요 — 아직 자동 매칭은 없습니다.
+      가짜 사람을 보여드리진 않아요.</p>
+    <div id="mtapp"></div>
+    <p class="hint" style="margin-top:20px">모집 글과 임시 저장은 이 브라우저에만 남습니다.</p>
+  </section>
+</div>
+
+<script>
+const DOW=["월","화","수","목","금","토","일"];
+const MEMLABEL={day:"일일입장",monthly:"월정기",lesson:"강습회원"};
+
+let FACILITIES=[];
+let ORIGIN=null;   // 데이터가 정한 기준점
+let ME=null;       // 브라우저가 알려준 실제 내 위치. 있으면 이쪽이 우선
+
+// 거리는 기준점이 있어야 성립한다. 권역이 넓어지면 좌표 없는 시설이 생기므로
+// 없으면 없다고 쓴다. 0km 도 유효한 값이라 null 검사를 따로 한다.
+const distTxt=d=>d==null?"거리 미확인":`${d.toFixed(1)}km`;
+// 내 위치를 알면 거기서 다시 잰다. 모르면 데이터가 정한 기준점에서 잰 값.
+function distOf(f){
+  if(ME&&f.lat!=null&&f.lng!=null){   // lat 만 보면 lng 결손 시 NaNkm 가 찍힌다
+    const dy=(f.lat-ME.lat)*110.574;
+    const dx=(f.lng-ME.lng)*111.320*Math.cos((f.lat+ME.lat)/2*Math.PI/180);
+    return Math.round(Math.hypot(dx,dy)*10)/10;
+  }
+  return f.dist==null?null:f.dist;
+}
+const distSort=(a,b)=>(distOf(a.f)??1e9)-(distOf(b.f)??1e9);
+
+const n0=new Date();
+// 실제 시각을 그대로 담는다. 05~23시로 잘라 넣으면 심야에 시계가 거짓말을 한다.
+// 막대만 그 범위로 클램프해 그린다(pct).
+let S={min:n0.getHours()*60+n0.getMinutes(),
+  dow:((n0.getDay()+6)%7)+1,res:"in",mem:"day",sel:null};
+
+const toMin=s=>(+s.slice(0,2))*60+(+s.slice(3,5));
+const fmt=m=>String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");
+// 막대 범위를 하루 전체로 둔다. 05~23시로 자르면 새벽 2시에 '지금' 선이
+// 05:00 자리에 붙박여 곧 06시 개장인 것처럼 보인다.
+const L0=0,L1=1440,SPAN=L1-L0;
+const pct=m=>((Math.min(L1,Math.max(L0,m))-L0)/SPAN*100);
+
+// 내 이용 자격으로 이 시간대에 들어갈 수 있나 (ticketTypes 미지정이면 전부 허용)
+const usable=s=>!s.ticketTypes||s.ticketTypes.includes(S.mem);
+
+// 이 세션에 들어갈 수 있는 마지막 시각(분). 없으면 null.
+// 마감 표기가 두 갈래다 — 의왕 "종료 20분 전", 양천 "시작 10분 후".
+// 둘 다 있으면 이른 쪽이 진짜 마감이다. (resolve.py 의 entry_deadline 과 같은 규칙)
+function entryDeadline(ac,a,b,s){
+  // 0 은 유효한 값이다 ("시작 정시에 마감"). falsy 로 거르면 통째로 무시된다.
+  const c=[];
+  if(ac.lastEntryBeforeEnd!=null) c.push(b-ac.lastEntryBeforeEnd);
+  if(ac.lastEntryAfterStart!=null) c.push(a+ac.lastEntryAfterStart);
+  if(s&&s.lastEntryAt) c.push(toMin(s.lastEntryAt));   // 세션 단위 예외
+  return c.length?Math.min(...c):null;
+}
+
+// 선택한 요일에 해당하는 '이번 주 실제 날짜'
+function dateForDow(dow){
+  const t=new Date(), today=((t.getDay()+6)%7)+1;
+  return new Date(t.getFullYear(),t.getMonth(),t.getDate()+(dow-today));
+}
+
+// resolve.py 의 nth_weekday_matches 와 같은 규칙. 요일만 보면 안 된다.
+// 예전 화면은 요일만 봐서 '4·10월 마지막 월요일 점검'을 매주 월요일 휴관으로 읽었고,
+// '셋째 주 일요일 휴관'을 모든 일요일 휴관으로 읽었다. 시설이 통째로 사라졌다.
+function nthMatches(c,d){
+  const spec=c.nthWeekday;
+  if(c.months&&!c.months.includes(d.getMonth()+1)) return false;
+  if(((d.getDay()+6)%7)+1!==spec.d) return false;
+  const day=d.getDate();
+  if(spec.n===-1){
+    const last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
+    return day+7>last;
+  }
+  return Math.floor((day-1)/7)+1===spec.n;
+}
+
+function resolve(f,dow,min){
+  const r=resolveCore(f,dow,min);
+  // 오늘은 아니지만 이 요일에 걸릴 수 있는 휴관 규칙 — 카드에 미리 알린다
+  const D=dateForDow(dow);
+  const up=(f.closures||[]).filter(c=>c.nthWeekday&&c.nthWeekday.d===dow&&!nthMatches(c,D))
+    .map(c=>c.reason);
+  if(up.length) r.upcoming=up;
+  return r;
+}
+
+function resolveCore(f,dow,min){
+  const D=dateForDow(dow);
+  for(const c of (f.closures||[])){
+    if(c.days&&c.days.includes(dow)) return {code:"closed",label:"오늘 휴관",detail:c.reason};
+    if(c.nthWeekday&&nthMatches(c,D)) return {code:"closed",label:"오늘 휴관",detail:c.reason};
+  }
+  const todays=(f.sessions||[]).filter(s=>s.days.includes(dow));
+  const unknownToday=(f.unknownDays||[]).includes(dow);
+  if(!todays.length){
+    if(unknownToday) return {code:"unknown",label:"시간 미확인",detail:"운영은 하나 시간표 미공개"};
+    return {code:"closed",label:"자유수영 없음",detail:"이 요일엔 개방 없음"};
+  }
+  const allOpens=todays.filter(s=>s.type==="open").sort((a,b)=>toMin(a.start)-toMin(b.start));
+  const opens=allOpens.filter(usable);
+  if(!allOpens.length) return {code:"unknown",label:"시간 미확인",detail:"강습만 확인됨"};
+  if(!opens.length) return {code:"closed",label:"자격 제한",
+    detail:`오늘 열리는 시간은 ${allOpens[0].ticketTypes.map(t=>MEMLABEL[t]).join("·")} 전용`};
+
+  for(const s of opens){
+    const a=toMin(s.start),b=toMin(s.end);
+    if(min>=a&&min<b){
+      const raw=b-min;
+      const left=f.access.maxStay?Math.min(raw,f.access.maxStay):raw;
+      const later=opens.find(x=>toMin(x.start)>min);
+      const dl=entryDeadline(f.access,a,b,s);
+      // 입장 마감을 지났으면 "지금 가면 못 들어간다" — 열림으로 세지 않는다.
+      // 다만 접어두지도 않는다. 헛걸음을 막아주는 가장 값진 정보이고,
+      // "지금은 늦었지만 다음 부는 몇 시"까지 알려줄 수 있는 상태다.
+      // 마감 정각은 아직 들어갈 수 있다 (resolve.py 와 같은 기준)
+      if(dl!=null&&min>dl){
+        return {code:"toolate",label:"입장 마감",s,a,b,lastEntry:fmt(dl),
+          next:later?`${later.start}–${later.end}`:null,alsoUnknown:unknownToday,
+          detail:`${s.start}–${s.end} 중이나 ${fmt(dl)}에 입장 마감`
+                 +(later?` · 다음 부 ${later.start}`:"")};
+      }
+      return {code:"open",label:s.lanesNote?"제약 있음":"지금 입수 가능",
+        s,a,b,raw,left,capped:left<raw,
+        partial:!!s.lanesNote,lastEntry:dl!=null?fmt(dl):null,
+        next:later?`${later.start}–${later.end}`:null,
+        alsoUnknown:unknownToday};
+    }
+  }
+  // 지금 열려 있긴 하나 내 자격으로는 못 들어가는 경우 (resolve.py 와 같은 분기)
+  const blocked=allOpens.find(s=>min>=toMin(s.start)&&min<toMin(s.end));
+  if(blocked) return {code:"closed",label:"자격 제한",
+    detail:`${blocked.start}–${blocked.end}은 ${(blocked.ticketTypes||[]).map(t=>MEMLABEL[t]).join("·")} 전용`
+      +(blocked.lanesNote?` · ${blocked.lanesNote}`:"")};
+
+  const inLesson=todays.some(s=>s.type==="lesson"&&min>=toMin(s.start)&&min<toMin(s.end));
+  const nx=opens.find(s=>toMin(s.start)>min);
+  if(nx){
+    const wait=toMin(nx.start)-min,tk=f.access.ticketOpenBefore;
+    return {code:wait<=90?"soon":"closed",label:wait<=90?`${wait}분 후 열림`:(inLesson?"강습 전용":"대기"),
+      detail:`${nx.start}–${nx.end}`+(tk?` · 발권 ${fmt(toMin(nx.start)-tk)}`:"")};
+  }
+  if(unknownToday) return {code:"unknown",label:"시간 미확인",
+    detail:"확인된 시간대는 지났으나 나머지 시간표가 미공개"};
+  return {code:"closed",label:inLesson?"강습 전용":"오늘 종료",detail:"내일 시간표 확인"};
+}
+
+// 토·일 요금이 갈리는 기관이 있다 (도봉은 토요일이 평일 요금, 일요일만 2시간·5,200원)
+// 토요일 요금표를 따로 둔 기관이면 토요일엔 그 표만 본다 (resolve.py 와 같은 기준).
+// weekend 로 흘리면 토요일에 성인 요금이 없는 곳에서 일요일 요금이 대신 찍힌다.
+const pickPrice=(p,dow,hasSat)=>!p?null
+  :(dow===6?(hasSat?(p.saturday??null):p.weekend):dow===7?p.weekend:p.weekday);
+
+function priceOf(f,dow){
+  if(!f.price||!f.price.adult) return null;
+  const hasSat=f.price.hasSaturday===true;   // 성인 행이 아니라 원장부 기준 (resolve.py 와 동일)
+  const base=pickPrice(f.price.adult,dow,hasSat);
+  const mem=pickPrice(f.price.member,dow,hasSat);
+  if(base==null) return null;
+  if(S.res==="in"||!f.surcharge) return {amount:base,up:false,mem};
+  const ap=(f.surcharge.appliesTo||[]).includes("day");
+  // 할증이 비율인 기관과 정액인 기관이 갈린다 (미추홀은 관내/관외 별도 요금표, 군포는 정액 가산)
+  const out=f.surcharge.outAmount||Math.round(base*(1+f.surcharge.rate));
+  return {amount:ap?out:base,up:ap,
+    rate:Math.round(f.surcharge.rate*100),mem};
+}
+
+function laneHTML(f,r){
+  const todays=(f.sessions||[]).filter(s=>s.days.includes(S.dow));
+  let segs="",flags="";
+  todays.forEach(s=>{
+    const a=toMin(s.start),b=toMin(s.end);
+    if(s.type==="lesson"){
+      segs+=`<div class="seg lesson" style="left:${pct(a)}%;width:${Math.max(pct(b)-pct(a),.5)}%"></div>`;
+    }else{
+      const lock=!usable(s);
+      const pc=(s.lanesNote?" part":"")+(lock?" locked":"");
+      const ttl=lock?` title="${MEMLABEL[S.mem]}은 이용할 수 없는 시간"`:"";
+      segs+=`<div class="seg open${pc}"${ttl} style="left:${pct(a)}%;width:${Math.max(pct(b)-pct(a),.5)}%"></div>`;
+      if(r.code==="open"&&a===r.a){
+        segs+=`<div class="seg live${s.lanesNote?" part":""}" style="left:${pct(S.min)}%;width:${Math.max(pct(b)-pct(S.min),.5)}%"></div>`;
+        if(r.capped) segs+=`<div class="capmark" style="left:${pct(S.min+r.left)}%"></div>`;
+      }
+      // 깃발은 세그먼트 위에 얹혀야 하므로 따로 모아 뒤에 붙인다.
+      // 애초에 못 들어가는 시간대(lock)에는 달지 않는다 — "여긴 마감까지 가면 된다"로 읽힌다.
+      const sdl=entryDeadline(f.access,a,b,s);
+      // sdl===a 인 곳(마감이 시작 정시)도 그려야 한다 — 안 그리면 라벨만 뜨고 구간이 빈다
+      if(sdl!=null&&!lock&&sdl>=a)
+        flags+=`<div class="seg deadline" title="${fmt(sdl)} 입장 마감" `
+              +`style="left:${pct(sdl)}%;width:${Math.max(pct(b)-pct(sdl),.4)}%"></div>`;
+    }
+  });
+  const opensToday=todays.filter(s=>s.type==="open");
+  const hasPart=opensToday.some(s=>s.lanesNote);
+  const hasLock=opensToday.some(s=>!usable(s));
+  const unk=(f.unknownDays||[]).includes(S.dow);
+  // 지금 들어가 있는 부의 마감 시각만 글자로 짚어준다. 전부 달면 읽히지 않는다.
+  // 카드가 overflow:hidden 이라 양 끝에서 라벨이 잘린다. 4~94%로 묶는다.
+  const labAt=v=>Math.min(Math.max(v,4),94);
+  const lab=(r.lastEntry&&r.s)
+    ? `<div class="flaglab" style="left:${labAt(pct(toMin(r.lastEntry)))}%">입장 마감 ${r.lastEntry}</div>` : "";
+  return `<div class="lanewrap">${lab}
+    <div class="lane">${segs}${flags}<div class="now" style="left:${pct(S.min)}%"></div></div></div>
+    <div class="laneaxis"><span>00</span><span>04</span><span>08</span><span>12</span><span>16</span><span>20</span><span>24</span></div>
+    <div class="legend">
+      ${r.code==="open"?`<span><i style="background:var(--water)"></i>남은 시간</span>`:""}
+      ${opensToday.length?`<span><i style="background:var(--water-past)"></i>자유수영</span>`:""}
+      ${todays.some(s=>s.type==="lesson")?`<span><i style="background:var(--lesson)"></i>강습</span>`:""}
+      ${flags?`<span><i style="background:repeating-linear-gradient(90deg,var(--rope) 0 1.5px,var(--water-past) 1.5px 3px)"></i>입장 마감 이후</span>`:""}
+      ${hasPart?`<span><i style="background:repeating-linear-gradient(45deg,var(--water-past) 0 3px,#fff 3px 6px)"></i>일부 레인만</span>`:""}
+      ${hasLock?`<span><i style="background:var(--tile-2)"></i>${MEMLABEL[S.mem]} 이용 불가</span>`:""}
+      ${r.capped?`<span><i style="background:#fff;border:1px solid var(--line)"></i>${r.left}분 상한</span>`:""}
+      ${unk?`<span><i style="background:var(--tile);border:1px dashed var(--ink-3)"></i>이 요일 시간표 일부 미공개</span>`:""}
+    </div>`;
+}
+
+function render(){
+  document.getElementById("clock").textContent=fmt(S.min);
+  document.getElementById("daybadge").textContent=DOW[S.dow-1]+"요일";
+  document.querySelectorAll("#dayChips .chip").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.dow===S.dow));
+  document.querySelectorAll("#resChips .chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.res===S.res));
+  document.querySelectorAll("#memChips .chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mem===S.mem));
+
+  // 지역 선택은 없다. 기준은 오직 "내 자리에서 가까운가".
+  const all=FACILITIES.map(f=>({f,r:resolve(f,S.dow,S.min)}));
+  const open=all.filter(x=>x.r.code==="open").sort(distSort);
+  const late=all.filter(x=>x.r.code==="toolate").sort(distSort);
+  const unsure=all.filter(x=>x.r.code==="unknown").sort(distSort);
+  const rest=all.filter(x=>!["open","toolate","unknown"].includes(x.r.code))
+    .sort((a,b)=>({soon:0,closed:1}[a.r.code]-{soon:0,closed:1}[b.r.code])||distSort(a,b));
+
+  // 숫자보다 "가장 가까운 곳이 어디고 몇 km 인가"가 먼저다.
+  const near=open[0];
+  document.getElementById("summary").innerHTML=
+    `${DOW[S.dow-1]} ${fmt(S.min)} &nbsp;·&nbsp; 입수 가능 <b>${open.length}</b>곳`
+    +(near?` &nbsp;·&nbsp; 가장 가까운 곳 <b>${esc(near.f.name)}</b> ${distTxt(distOf(near.f))}`:"")
+    +(late.length?` &nbsp;·&nbsp; 방금 마감 ${late.length}`:"")
+    +(unsure.length?` &nbsp;·&nbsp; 확인 필요 ${unsure.length}`:"");
+
+  // 들어갈 수 있는 곳을 먼저, 그 안에서는 가까운 순.
+  // 지도의 점과 이 목록은 같은 것의 두 얼굴이다.
+  const ordered=[...open,...late,...unsure,...rest];
+  if(!ordered.some(x=>x.f.id===S.sel)) S.sel=ordered.length?ordered[0].f.id:null;
+
+  const picker=document.getElementById("picker");
+  const keepScroll=picker.scrollTop;
+  const hadFocus=document.activeElement&&document.activeElement.closest("#picker");
+  picker.innerHTML=ordered.map(({f,r})=>{
+    const on=f.id===S.sel;
+    const swatch={open:"var(--water)",toolate:"var(--rope)",soon:"var(--water-past)",
+      closed:"var(--tile-2)"}[r.code]||"#fff";
+    const border=r.code==="unknown"?";border:1px dashed var(--ink-3)":"";
+    return `<button class="prow" type="button" data-id="${f.id}" aria-pressed="${on}">
+      <span class="pmark" style="background:${swatch}${border}"></span>
+      <span class="pname">${esc(f.name)}</span>
+      <span class="pcity">${esc(f.city)} · ${distTxt(distOf(f))}</span>
+      <span class="pstat">${esc(r.label||r.code)}</span></button>`;}).join("");
+  picker.querySelectorAll(".prow").forEach(b=>{
+    b.onclick=()=>{S.sel=b.dataset.id;render();};
+  });
+  // innerHTML 을 갈아끼우면 스크롤과 포커스가 날아간다. 슬라이더를 끌 때마다
+  // 목록이 맨 위로 튀면 못 쓴다.
+  picker.scrollTop=keepScroll;
+  const cur=picker.querySelector('[aria-pressed="true"]');
+  if(cur){
+    if(hadFocus) cur.focus({preventScroll:true});
+    cur.scrollIntoView({block:"nearest"});
+  }
+
+  const sel=ordered.find(x=>x.f.id===S.sel);
+  const card={open:openCard,toolate:lateCard,unknown:unknownCard}[sel&&sel.r.code];
+  document.getElementById("detail").innerHTML=
+    !sel?emptyHTML(rest):(card?card(sel):restCard(sel));
+
+  renderMap(all);
+}
+
+// 휴관·종료·자격 제한도 상세는 보여준다. 왜 안 되는지가 답이기 때문이다.
+function restCard({f,r}){
+  const rows=[`<div class="row"><span class="rk">지금</span><span class="rv"><b>${r.label}</b> — ${r.detail}</span></div>`];
+  (r.upcoming||[]).forEach(t=>rows.push(`<div class="row"><span class="rk">휴관 주의</span><span class="rv">오늘은 해당 없지만 — ${t}</span></div>`));
+  (f.rules||[]).forEach((t,i)=>rows.push(`<div class="row"><span class="rk">${i?"":"규칙"}</span><span class="rv">${t}</span></div>`));
+  return `<article data-fid="${f.id}" class="card shut">
+    <div class="chead">
+      <div><h2 class="cname">${f.name}</h2>
+        <div class="cmeta">${f.city} · ${distTxt(distOf(f))} · ${f.pool}</div></div>
+      <div class="remain"><span class="ubadge">${r.label}</span></div>
+    </div>
+    ${laneHTML(f,r)}
+    <div class="rows">${rows.join("")}</div>
+    ${actionsHTML(f)}
+    ${freshHTML(f)}
+  </article>`;
+}
+
+const FRESHTXT={confirmed:"공식 페이지 확인",unverified:"교차확인 필요",stale:"출처 낡음"};
+
+function freshHTML(f){
+  const src=f.fresh.url?`<a href="${f.fresh.url}" target="_blank" rel="noopener" style="color:inherit">${f.fresh.src}</a>`:f.fresh.src;
+  return `<div class="fresh"><span class="dot ${f.fresh.level}"></span>${FRESHTXT[f.fresh.level]} · ${f.fresh.at} · ${src}</div>`;
+}
+
+function actionsHTML(f,{primaryCall}={}){
+  const acts=[];
+  if(f.phone) acts.push(`<a class="act${primaryCall?" primary":""}" href="tel:${f.phone.replace(/-/g,"")}">전화 ${f.phone}</a>`);
+  if(f.fresh.url) acts.push(`<a class="act" href="${f.fresh.url}" target="_blank" rel="noopener">공식 페이지</a>`);
+  return acts.length?`<div class="actions">${acts.join("")}</div>`:"";
+}
+
+function openCard({f,r}){
+  const p=priceOf(f,S.dow),rows=[];
+  if(r.partial) rows.push(`<div class="row"><span class="rk">주의</span><span class="rv"><span class="warn">${r.s.lanesNote}</span></span></div>`);
+  else if(r.s.note) rows.push(`<div class="row"><span class="rk">이 시간</span><span class="rv">${r.s.note}</span></div>`);
+  if(r.lastEntry) rows.push(`<div class="row"><span class="rk">입장 마감</span><span class="rv"><b>${r.lastEntry}</b>까지 — 이후에는 들어갈 수 없습니다</span></div>`);
+  if(p){
+    const memTxt=p.mem?` · 회원 ${p.mem.toLocaleString()}원`:"";
+    rows.push(`<div class="row"><span class="rk">요금</span><span class="rv"><b>${p.amount.toLocaleString()}원</b> 성인 1일권${memTxt}${p.up?` <span class="up">↑ 관외 ${p.rate}%</span>`:(S.res==="out"&&f.surcharge?` <span class="up">관외도 동일</span>`:"")}</span></div>`);
+  }
+  if(S.res==="out"&&f.surcharge&&f.surcharge.note)
+    rows.push(`<div class="row"><span class="rk">할증</span><span class="rv">${f.surcharge.note}</span></div>`);
+  if(S.mem!=="day"&&f.eligibilityNote&&f.eligibilityNote.lesson)
+    rows.push(`<div class="row"><span class="rk">자격</span><span class="rv">${f.eligibilityNote.lesson}</span></div>`);
+  if(f.access.capacityEnforced)
+    rows.push(`<div class="row"><span class="rk">정원</span><span class="rv"><span class="warn">정원 마감 시 입장 불가 — 실시간 여석은 확인 불가</span></span></div>`);
+  if(f.derived) rows.push(`<div class="row"><span class="rk">파생</span><span class="rv">${f.derived}</span></div>`);
+  if(r.next) rows.push(`<div class="row"><span class="rk">다음 부</span><span class="rv">${r.next}</span></div>`);
+  if(r.alsoUnknown) rows.push(`<div class="row"><span class="rk">주의</span><span class="rv"><span class="up">이 요일 시간표 일부가 미공개 — 다른 시간대가 더 있을 수 있습니다</span></span></div>`);
+  (r.upcoming||[]).forEach(t=>rows.push(`<div class="row"><span class="rk">휴관 주의</span><span class="rv">오늘은 해당 없지만 — ${t}</span></div>`));
+  (f.rules||[]).forEach((t,i)=>rows.push(`<div class="row"><span class="rk">${i?"":"규칙"}</span><span class="rv">${t}</span></div>`));
+  if(r.s.provisional) rows.push(`<div class="row"><span class="rk">주의</span><span class="rv"><span class="up">한시적 운영 — 이번 달 개설 확인 필요</span></span></div>`);
+  return `<article data-fid="${f.id}" class="card${r.partial?" partial":""}">
+    <div class="chead">
+      <div><h2 class="cname">${f.name}</h2>
+        <div class="cmeta">${f.city} · ${distTxt(distOf(f))} · ${f.pool}</div></div>
+      <div class="remain"><div class="rnum">${r.left}<span>분</span></div>
+        <div class="rwin">${r.s.start}–${r.s.end}</div></div>
+    </div>
+    ${laneHTML(f,r)}
+    <div class="rows">${rows.join("")}</div>
+    ${actionsHTML(f)}
+    ${freshHTML(f)}
+  </article>`;
+}
+
+// 열려 있지만 입장은 마감된 상태. 접어두면 헛걸음을 못 막는다.
+// "지금은 늦었다 + 다음은 몇 시"가 한 카드에 있어야 다음 행동이 정해진다.
+function lateCard({f,r}){
+  const rows=[];
+  rows.push(`<div class="row"><span class="rk">지금</span><span class="rv">${r.s.start}–${r.s.end} 진행 중이지만 <b>${r.lastEntry}에 입장이 마감</b>됐습니다. 지금 가면 못 들어갑니다.</span></div>`);
+  if(r.next) rows.push(`<div class="row"><span class="rk">다음 부</span><span class="rv"><b>${r.next}</b> — 이때 가면 됩니다</span></div>`);
+  if(r.alsoUnknown) rows.push(`<div class="row"><span class="rk">주의</span><span class="rv"><span class="up">이 요일 시간표 일부가 미공개 — 다른 시간대가 더 있을 수 있습니다</span></span></div>`);
+  (r.upcoming||[]).forEach(t=>rows.push(`<div class="row"><span class="rk">휴관 주의</span><span class="rv">오늘은 해당 없지만 — ${t}</span></div>`));
+  (f.rules||[]).forEach((t,i)=>rows.push(`<div class="row"><span class="rk">${i?"":"규칙"}</span><span class="rv">${t}</span></div>`));
+  return `<article data-fid="${f.id}" class="card late">
+    <div class="chead">
+      <div><h2 class="cname">${f.name}</h2>
+        <div class="cmeta">${f.city} · ${distTxt(distOf(f))} · ${f.pool}</div></div>
+      <div class="remain"><span class="ubadge late">입장 마감</span></div>
+    </div>
+    ${laneHTML(f,r)}
+    <div class="rows">${rows.join("")}</div>
+    ${actionsHTML(f)}
+    ${freshHTML(f)}
+  </article>`;
+}
+
+// 미확인 시설도 메인에 세운다. 접어두면 실제로 열려 있는 곳을 놓친다.
+function unknownCard({f,r}){
+  const p=priceOf(f,S.dow),rows=[];
+  rows.push(`<div class="row"><span class="rk">상태</span><span class="rv">${r.detail}. 열려 있을 수도, 아닐 수도 있습니다 — <b>추측해서 채우지 않았습니다.</b></span></div>`);
+  const known=(f.sessions||[]).filter(s=>s.type==="open"&&!s.days.includes(S.dow));
+  if(known.length){
+    const days=[...new Set(known.flatMap(s=>s.days))].sort().map(d=>DOW[d-1]).join("·");
+    rows.push(`<div class="row"><span class="rk">확인된 날</span><span class="rv">${days}요일은 시간표가 확인돼 있습니다</span></div>`);
+  }
+  if(p) rows.push(`<div class="row"><span class="rk">요금</span><span class="rv"><b>${p.amount.toLocaleString()}원</b> 성인 1일권${p.up?` <span class="up">↑ 관외 ${p.rate}%</span>`:""}</span></div>`);
+  if(f.derived) rows.push(`<div class="row"><span class="rk">파생</span><span class="rv">${f.derived}</span></div>`);
+  (r.upcoming||[]).forEach(t=>rows.push(`<div class="row"><span class="rk">휴관 주의</span><span class="rv">오늘은 해당 없지만 — ${t}</span></div>`));
+  (f.rules||[]).forEach((t,i)=>rows.push(`<div class="row"><span class="rk">${i?"":"규칙"}</span><span class="rv">${t}</span></div>`));
+  return `<article data-fid="${f.id}" class="card unknown">
+    <div class="chead">
+      <div><h2 class="cname">${f.name}</h2>
+        <div class="cmeta">${f.city} · ${distTxt(distOf(f))} · ${f.pool}</div></div>
+      <div class="remain"><span class="ubadge">미확인 · 전화 확인</span></div>
+    </div>
+    ${laneHTML(f,r)}
+    <div class="rows">${rows.join("")}</div>
+    ${actionsHTML(f,{primaryCall:true})}
+    ${freshHTML(f)}
+  </article>`;
+}
+
+// ── 수도권 입체 지도 ────────────────────────────────────────
+// 지도 라이브러리를 쓰지 않는다. 단일 파일·무의존 구조를 지키려고
+// 행정경계를 인라인 SVG 로 직접 그리고, 위에서 내려다본 각도로 블록을 세운다.
+// 구 색이 진할수록 그 구에서 지금 입수 가능한 수영장이 많다.
+// 경계 © 통계청(KOSTAT) 2013 / southkorea-maps
+// viewBox 단위를 CSS 픽셀에 가깝게 잡아야 모바일에서 점과 글자가 읽힌다.
+// 760 으로 두면 360px 화면에서 0.47배로 줄어 점이 2px, 라벨이 4px가 된다.
+// 각도를 세우면 세로가 덜 눌려서 지도가 길어진다.
+// 축척은 세로가 정한다. 가로를 줄여도 지도가 커지지 않고 옆 땅(하남·성남)만 잘린다.
+const MAPW=420,MAPH=380;
+const KMY=110.574,KMX=111.320;
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// 구·시 단위 경계. 세로만 살짝 눌러 눕히고 두께를 줘 블록으로 세운다.
+// 경계 © 통계청(KOSTAT) 2013 / southkorea-maps
+// n=이름 s=광역시도 c=중심점 r=링([경도,위도], 반시계)
+const DISTRICTS=[
+{n:"종로구",s:"서울",c:[126.9799,37.5914],r:[[126.9714,37.6274],[126.9616,37.6257],[126.9589,37.6226],[126.9543,37.622],[126.9515,37.6149],[126.9531,37.6093],[126.9519,37.606],[126.9555,37.6024],[126.9548,37.5976],[126.9562,37.5958],[126.9592,37.5956],[126.9584,37.5924],[126.9605,37.5877],[126.9588,37.5819],[126.9628,37.578],[126.9591,37.5788],[126.9576,37.5762],[126.9557,37.5761],[126.9687,37.5631],[126.9748,37.5665],[126.991,37.5653],[127.0181,37.567],[127.0255,37.5689],[127.0253,37.5752],[127.0234,37.576],[127.0202,37.5748],[127.0189,37.5787],[127.0168,37.5794],[127.0109,37.5777],[127.0086,37.5833],[127.0044,37.5864],[127.003,37.5896],[126.9913,37.5884],[126.9841,37.5931],[126.9837,37.5964],[126.9898,37.5984],[126.988,37.6043],[126.9892,37.6108],[126.9849,37.6139],[126.9813,37.6218],[126.9826,37.6263],[126.978,37.6261],[126.9783,37.6282],[126.9739,37.6295]]},
+{n:"중구",s:"서울",c:[126.9979,37.5573],r:[[127.0225,37.5689],[127.0181,37.567],[127.004,37.5668],[126.991,37.5653],[126.9779,37.5666],[126.9716,37.5657],[126.9687,37.5631],[126.9717,37.5592],[126.9636,37.5561],[126.9653,37.5544],[126.9638,37.5525],[126.9639,37.5496],[126.9645,37.5487],[126.9706,37.5526],[126.9712,37.5511],[126.9743,37.5516],[126.9788,37.5499],[126.979,37.5523],[126.981,37.5508],[126.9848,37.551],[126.9858,37.5502],[126.9875,37.5509],[126.9897,37.5488],[126.9933,37.5481],[126.9974,37.5444],[127.0006,37.5471],[127.0048,37.5468],[127.0063,37.5476],[127.0068,37.5455],[127.008,37.5454],[127.0069,37.5434],[127.0094,37.541],[127.0128,37.5418],[127.011,37.543],[127.0117,37.5453],[127.0138,37.5457],[127.0172,37.5488],[127.02,37.5538],[127.025,37.5551],[127.0254,37.5579],[127.0287,37.5608],[127.0288,37.5622],[127.0257,37.5624],[127.0255,37.5689]]},
+{n:"용산구",s:"서울",c:[126.9826,37.5298],r:[[127.0069,37.5434],[127.008,37.5454],[127.0063,37.5476],[127.0006,37.5471],[126.9974,37.5444],[126.9875,37.5509],[126.981,37.5508],[126.979,37.5523],[126.9788,37.5499],[126.9743,37.5516],[126.9712,37.5511],[126.9706,37.5526],[126.9645,37.5487],[126.9658,37.5461],[126.96,37.5427],[126.9604,37.5399],[126.9577,37.5367],[126.9532,37.5334],[126.9472,37.5321],[126.9457,37.5266],[126.9488,37.5242],[126.9525,37.5172],[126.9633,37.511],[126.9842,37.5092],[126.9846,37.5107],[126.9907,37.5113],[126.9915,37.5099],[127.0058,37.5169],[127.023,37.5323],[127.0169,37.5361],[127.0114,37.5369],[127.0107,37.5412]]},
+{n:"성동구",s:"서울",c:[127.0434,37.5485],r:[[127.0257,37.5624],[127.0288,37.5622],[127.0287,37.5608],[127.0254,37.5579],[127.0245,37.5562],[127.025,37.5551],[127.0215,37.5547],[127.02,37.5538],[127.0189,37.5506],[127.0172,37.5488],[127.0138,37.5457],[127.0117,37.5453],[127.011,37.543],[127.0128,37.5418],[127.0114,37.542],[127.0107,37.5411],[127.0114,37.5369],[127.0169,37.5361],[127.023,37.5323],[127.027,37.5348],[127.032,37.5361],[127.0481,37.5297],[127.049,37.5314],[127.0587,37.5263],[127.0758,37.5566],[127.0729,37.5578],[127.0608,37.5597],[127.0501,37.5676],[127.0443,37.5702],[127.0386,37.5697],[127.0332,37.567],[127.0255,37.5689]]},
+{n:"광진구",s:"서울",c:[127.0887,37.5438],r:[[127.0742,37.5572],[127.0758,37.5566],[127.0587,37.5263],[127.0683,37.5225],[127.075,37.5209],[127.0797,37.5208],[127.0864,37.5216],[127.0928,37.5233],[127.0944,37.524],[127.1009,37.5248],[127.1048,37.5312],[127.1137,37.5437],[127.116,37.5505],[127.116,37.5558],[127.1152,37.5575],[127.1127,37.557],[127.1033,37.5572],[127.1055,37.5669],[127.1063,37.5683],[127.1061,37.5689],[127.1051,37.5696],[127.1039,37.5697],[127.103,37.5708],[127.1016,37.5697],[127.1006,37.5697],[127.0963,37.5677],[127.0947,37.5676],[127.0944,37.5671],[127.0933,37.5668],[127.0905,37.5673],[127.0903,37.568],[127.0807,37.5691]]},
+{n:"동대문구",s:"서울",c:[127.0574,37.5792],r:[[127.0255,37.5689],[127.0332,37.567],[127.0386,37.5697],[127.0443,37.5702],[127.0501,37.5676],[127.0608,37.5597],[127.0742,37.5572],[127.0808,37.5698],[127.08,37.5769],[127.0733,37.586],[127.0717,37.5921],[127.0718,37.5948],[127.0748,37.5996],[127.0738,37.604],[127.0727,37.6041],[127.0726,37.6065],[127.0707,37.6065],[127.0702,37.6037],[127.0683,37.6028],[127.0644,37.6025],[127.0613,37.5982],[127.0572,37.5985],[127.0541,37.5972],[127.0531,37.5988],[127.0498,37.5935],[127.0441,37.5941],[127.0412,37.5885],[127.0385,37.5884],[127.0385,37.5871],[127.0316,37.5799],[127.0253,37.5752]]},
+{n:"중랑구",s:"서울",c:[127.0951,37.5953],r:[[127.0748,37.5995],[127.0718,37.5948],[127.0716,37.5927],[127.0733,37.586],[127.08,37.5769],[127.0807,37.5691],[127.0903,37.568],[127.0905,37.5673],[127.0939,37.5669],[127.103,37.5708],[127.1049,37.579],[127.0994,37.5798],[127.1094,37.5825],[127.1114,37.5819],[127.1126,37.5864],[127.1151,37.5903],[127.1199,37.5912],[127.1205,37.5922],[127.1159,37.5972],[127.1201,37.6018],[127.1204,37.6048],[127.1187,37.606],[127.1197,37.6089],[127.1187,37.6119],[127.1192,37.615],[127.1175,37.6168],[127.113,37.618],[127.1042,37.6172],[127.0992,37.6143],[127.0909,37.6175],[127.0882,37.6175],[127.0735,37.6128]]},
+{n:"성북구",s:"서울",c:[127.0204,37.6031],r:[[126.978,37.6261],[126.9826,37.6263],[126.9813,37.6218],[126.9892,37.6108],[126.9898,37.5984],[126.9837,37.5964],[126.9841,37.5931],[126.9913,37.5884],[127.003,37.5896],[127.0109,37.5777],[127.0185,37.579],[127.0202,37.5748],[127.0312,37.5796],[127.0441,37.5941],[127.0498,37.5935],[127.0531,37.5988],[127.0613,37.5982],[127.0644,37.6025],[127.0708,37.6041],[127.0707,37.6065],[127.0738,37.604],[127.0733,37.6136],[127.0641,37.6116],[127.0521,37.6216],[127.0325,37.6063],[127.0323,37.6095],[127.0243,37.6085],[127.0128,37.6137],[127.01,37.6212],[127.0021,37.623],[126.9867,37.6338],[126.9772,37.6286]]},
+{n:"강북구",s:"서울",c:[127.0131,37.6409],r:[[126.9963,37.6635],[126.9903,37.661],[126.9871,37.6565],[126.9815,37.653],[126.9867,37.6447],[126.9854,37.6409],[126.9885,37.6379],[126.9866,37.6339],[126.9934,37.6292],[126.995,37.6296],[127.0021,37.623],[127.01,37.6212],[127.0101,37.6166],[127.0128,37.6137],[127.0197,37.6118],[127.0243,37.6085],[127.0323,37.6095],[127.0325,37.6063],[127.0394,37.61],[127.0412,37.6135],[127.0521,37.6216],[127.0267,37.6446],[127.0153,37.6477],[127.0166,37.6591],[127.0186,37.659],[127.0175,37.6634],[127.0206,37.6672],[127.0141,37.6765],[127.0102,37.6775],[127.0104,37.6819],[127.0001,37.681],[126.9938,37.6767]]},
+{n:"도봉구",s:"서울",c:[127.0346,37.6665],r:[[127.0511,37.6912],[127.0472,37.6897],[127.045,37.6911],[127.0452,37.6924],[127.0437,37.6926],[127.038,37.6895],[127.0346,37.6889],[127.0313,37.6962],[127.0293,37.6979],[127.027,37.6967],[127.0242,37.6968],[127.0214,37.6986],[127.018,37.6982],[127.017,37.6958],[127.0141,37.6955],[127.0126,37.6941],[127.0102,37.6892],[127.0111,37.6842],[127.0102,37.6775],[127.0141,37.6765],[127.0206,37.6672],[127.0175,37.6634],[127.0186,37.659],[127.0166,37.6591],[127.0147,37.65],[127.0153,37.6477],[127.0184,37.6461],[127.0232,37.6462],[127.0267,37.6446],[127.0348,37.6388],[127.0368,37.6348],[127.0395,37.6336],[127.0436,37.6285],[127.0461,37.6308],[127.0485,37.6385],[127.0511,37.6396],[127.0534,37.6424],[127.055,37.639],[127.057,37.638],[127.058,37.6432],[127.0562,37.653],[127.0509,37.6663],[127.0541,37.681],[127.0529,37.6842]]},
+{n:"노원구",s:"서울",c:[127.0772,37.6494],r:[[127.0715,37.6916],[127.0672,37.6871],[127.0569,37.6866],[127.0529,37.6842],[127.0541,37.681],[127.0509,37.6663],[127.058,37.6432],[127.057,37.638],[127.0534,37.6424],[127.0485,37.6385],[127.0436,37.6285],[127.0645,37.6115],[127.0882,37.6175],[127.0992,37.6143],[127.1078,37.618],[127.1056,37.6201],[127.1075,37.6243],[127.1142,37.6298],[127.1132,37.6397],[127.1089,37.6423],[127.0969,37.6428],[127.0944,37.6471],[127.095,37.6521],[127.0881,37.6531],[127.0988,37.6581],[127.0961,37.6598],[127.0979,37.6695],[127.0939,37.6764],[127.0984,37.6832],[127.0979,37.6861],[127.087,37.6881],[127.0839,37.6936]]},
+{n:"은평구",s:"서울",c:[126.9308,37.6169],r:[[126.9484,37.6561],[126.9425,37.6538],[126.9368,37.6479],[126.9163,37.6419],[126.9074,37.6461],[126.9146,37.6415],[126.9146,37.6389],[126.9128,37.6327],[126.9086,37.6297],[126.9112,37.6256],[126.9094,37.6191],[126.903,37.61],[126.9019,37.5871],[126.8894,37.5858],[126.888,37.5912],[126.8843,37.5881],[126.9037,37.5731],[126.9152,37.5842],[126.9179,37.5803],[126.9229,37.5801],[126.926,37.5844],[126.9302,37.5856],[126.9328,37.5917],[126.9428,37.5959],[126.942,37.6001],[126.9525,37.6051],[126.9515,37.6149],[126.9543,37.622],[126.9743,37.6298],[126.9589,37.6499],[126.9547,37.6519]]},
+{n:"서대문구",s:"서울",c:[126.9412,37.5746],r:[[126.9492,37.6051],[126.947,37.602],[126.942,37.6001],[126.9428,37.5959],[126.9328,37.5917],[126.9304,37.5889],[126.9302,37.5856],[126.926,37.5844],[126.9239,37.5807],[126.9179,37.5803],[126.9183,37.5828],[126.9152,37.5842],[126.9037,37.5727],[126.9198,37.5646],[126.928,37.5624],[126.9303,37.5605],[126.9287,37.556],[126.9388,37.5523],[126.9468,37.554],[126.9608,37.5539],[126.9717,37.5592],[126.9557,37.5761],[126.9576,37.5762],[126.9591,37.5788],[126.9628,37.578],[126.9588,37.5819],[126.9605,37.5877],[126.9584,37.5924],[126.9592,37.5956],[126.9556,37.5963],[126.9555,37.6026],[126.9525,37.6051]]},
+{n:"마포구",s:"서울",c:[126.9121,37.5556],r:[[126.9037,37.5731],[126.8843,37.5881],[126.8797,37.5834],[126.878,37.5768],[126.8701,37.5746],[126.8677,37.5727],[126.8656,37.5739],[126.8599,37.5728],[126.8605,37.5668],[126.8684,37.5631],[126.9028,37.5413],[126.9083,37.5392],[126.9368,37.5334],[126.9457,37.5266],[126.9472,37.5321],[126.9543,37.534],[126.9604,37.5399],[126.96,37.5427],[126.9658,37.546],[126.9638,37.5505],[126.9651,37.5554],[126.9636,37.5561],[126.9608,37.5539],[126.9592,37.5547],[126.9468,37.554],[126.9385,37.5524],[126.9287,37.556],[126.9303,37.5605],[126.9282,37.5622],[126.9071,37.5705],[126.9037,37.5727],[126.9052,37.5741]]},
+{n:"양천구",s:"서울",c:[126.8584,37.522],r:[[126.8239,37.532],[126.8272,37.5274],[126.8302,37.5263],[126.8309,37.5237],[126.8279,37.5216],[126.8273,37.5157],[126.8252,37.5132],[126.8264,37.5061],[126.8332,37.5059],[126.8327,37.504],[126.8383,37.5002],[126.8397,37.4972],[126.8428,37.5036],[126.8461,37.5023],[126.8473,37.5052],[126.8542,37.5077],[126.8578,37.5062],[126.8602,37.5071],[126.8622,37.5039],[126.8659,37.5054],[126.8645,37.5039],[126.8656,37.5022],[126.8743,37.5026],[126.8815,37.5134],[126.8826,37.5224],[126.8884,37.5253],[126.8906,37.5279],[126.8921,37.5276],[126.8936,37.5303],[126.8894,37.5406],[126.8872,37.5408],[126.8828,37.5451],[126.8745,37.5443],[126.8664,37.5486],[126.8642,37.5413],[126.8659,37.538],[126.8661,37.527],[126.8426,37.5237],[126.8366,37.5337],[126.8352,37.539],[126.8322,37.5389],[126.8318,37.5436],[126.8289,37.5391],[126.8242,37.5379]]},
+{n:"강서구",s:"서울",c:[126.8267,37.558],r:[[126.7954,37.5744],[126.785,37.5709],[126.7823,37.5645],[126.7787,37.5632],[126.777,37.5651],[126.78,37.5571],[126.7777,37.559],[126.7748,37.5544],[126.7664,37.5525],[126.7732,37.5459],[126.7939,37.541],[126.7969,37.5387],[126.7966,37.533],[126.8049,37.5403],[126.8275,37.5382],[126.8315,37.5437],[126.8426,37.5237],[126.8661,37.527],[126.8664,37.5486],[126.8745,37.5443],[126.8828,37.5451],[126.8883,37.5408],[126.8874,37.5435],[126.8918,37.5474],[126.8605,37.5668],[126.8598,37.5718],[126.853,37.5728],[126.8225,37.588],[126.8064,37.6015],[126.7996,37.5972],[126.8029,37.5852],[126.7958,37.5788]]},
+{n:"구로구",s:"서울",c:[126.8594,37.4919],r:[[126.8214,37.4965],[126.8148,37.4938],[126.8165,37.4903],[126.8248,37.4872],[126.8214,37.4814],[126.8238,37.4725],[126.8338,37.4749],[126.8474,37.471],[126.8486,37.4789],[126.8547,37.4791],[126.8707,37.4924],[126.8721,37.4891],[126.8765,37.4883],[126.875,37.4855],[126.8793,37.4851],[126.8768,37.4826],[126.8827,37.4832],[126.8916,37.4767],[126.901,37.4761],[126.9053,37.4822],[126.8997,37.4848],[126.8967,37.4913],[126.8972,37.5053],[126.8816,37.514],[126.8714,37.5021],[126.8542,37.5077],[126.8461,37.5023],[126.8428,37.5036],[126.8397,37.4972],[126.8332,37.5059],[126.8269,37.5055]]},
+{n:"금천구",s:"서울",c:[126.9037,37.4576],r:[[126.8986,37.4757],[126.8916,37.4767],[126.8808,37.4838],[126.8755,37.4819],[126.8806,37.4719],[126.8912,37.4587],[126.8874,37.4573],[126.8883,37.4536],[126.8913,37.4521],[126.8917,37.4495],[126.8962,37.4498],[126.8981,37.4455],[126.897,37.4437],[126.9003,37.4418],[126.9027,37.4371],[126.901,37.436],[126.9049,37.4313],[126.9103,37.4309],[126.9164,37.4372],[126.9215,37.438],[126.9309,37.4481],[126.9253,37.4516],[126.9246,37.4544],[126.9163,37.4553],[126.9158,37.4625],[126.9103,37.4698],[126.9142,37.472],[126.9137,37.4754],[126.911,37.4763],[126.9118,37.4781],[126.9028,37.4765],[126.9016,37.4775]]},
+{n:"영등포구",s:"서울",c:[126.9122,37.5175],r:[[126.8874,37.5435],[126.8934,37.533],[126.8936,37.5303],[126.8921,37.5276],[126.8906,37.5279],[126.8884,37.5253],[126.8826,37.5224],[126.8816,37.514],[126.8917,37.5093],[126.8942,37.5066],[126.8972,37.5053],[126.8959,37.5047],[126.8954,37.4997],[126.8967,37.4913],[126.8997,37.4848],[126.9026,37.4828],[126.9053,37.4822],[126.9139,37.4931],[126.9223,37.4954],[126.9275,37.5099],[126.9292,37.5102],[126.9291,37.5117],[126.9273,37.5121],[126.9281,37.5133],[126.9345,37.5129],[126.9441,37.5146],[126.9525,37.5172],[126.9488,37.5242],[126.9368,37.5334],[126.9083,37.5392],[126.9028,37.5413],[126.8918,37.5474]]},
+{n:"동작구",s:"서울",c:[126.9544,37.4969],r:[[126.9651,37.5104],[126.9595,37.5125],[126.9525,37.5172],[126.9345,37.5129],[126.9281,37.5133],[126.9273,37.5121],[126.9291,37.5117],[126.9292,37.5102],[126.9275,37.5099],[126.9223,37.4954],[126.9139,37.4931],[126.9053,37.4822],[126.9132,37.4837],[126.9192,37.4866],[126.9264,37.4872],[126.9295,37.4921],[126.9345,37.4901],[126.9412,37.4891],[126.9416,37.4881],[126.9492,37.4913],[126.956,37.4882],[126.9623,37.4911],[126.9644,37.4844],[126.9634,37.4807],[126.967,37.4769],[126.9726,37.4726],[126.9837,37.4739],[126.985,37.4936],[126.9869,37.497],[126.9899,37.4958],[126.9828,37.4999],[126.9822,37.5093]]},
+{n:"관악구",s:"서울",c:[126.9481,37.4645],r:[[126.9594,37.489],[126.9561,37.4882],[126.9492,37.4913],[126.9416,37.4881],[126.9412,37.4891],[126.9295,37.4921],[126.9264,37.4872],[126.9192,37.4866],[126.9132,37.4837],[126.9053,37.4822],[126.9016,37.4775],[126.9028,37.4765],[126.9118,37.4781],[126.911,37.4763],[126.9137,37.4754],[126.9142,37.472],[126.9103,37.4698],[126.9137,37.4638],[126.9158,37.4625],[126.9163,37.4553],[126.9246,37.4544],[126.9253,37.4516],[126.9327,37.4459],[126.9331,37.4429],[126.9395,37.439],[126.9415,37.4332],[126.9503,37.4363],[126.9579,37.4363],[126.9648,37.4381],[126.9667,37.4429],[126.9761,37.4448],[126.9784,37.4477],[126.9829,37.4502],[126.9843,37.4537],[126.9907,37.4553],[126.9896,37.4576],[126.9903,37.4627],[126.9848,37.4698],[126.9838,37.4739],[126.9726,37.4726],[126.9634,37.4807],[126.9645,37.4842],[126.9633,37.4906],[126.9611,37.491]]},
+{n:"서초구",s:"서울",c:[127.0335,37.4709],r:[[127.0001,37.5139],[126.9915,37.5099],[126.9907,37.5113],[126.9822,37.5093],[126.9828,37.4999],[126.9899,37.4958],[126.9869,37.497],[126.985,37.4936],[126.9837,37.4739],[126.9903,37.4627],[126.9897,37.4566],[126.9907,37.4553],[126.9989,37.4594],[126.9992,37.4644],[127.0055,37.4645],[127.0132,37.4526],[127.02,37.4528],[127.0282,37.4557],[127.0334,37.463],[127.0368,37.461],[127.0392,37.4525],[127.0405,37.4427],[127.038,37.4363],[127.0431,37.4354],[127.0544,37.4257],[127.0727,37.4271],[127.0734,37.4329],[127.0766,37.4354],[127.0738,37.439],[127.0837,37.4382],[127.0901,37.4423],[127.0981,37.4597],[127.0883,37.4676],[127.0864,37.4727],[127.076,37.4701],[127.0719,37.4724],[127.0646,37.47],[127.0637,37.4662],[127.0522,37.4673],[127.0435,37.4828],[127.0362,37.4818],[127.0225,37.5079],[127.0197,37.5193],[127.014,37.525]]},
+{n:"강남구",s:"서울",c:[127.0648,37.4945],r:[[127.049,37.5314],[127.0481,37.5297],[127.032,37.5361],[127.027,37.5348],[127.014,37.525],[127.0197,37.5193],[127.0225,37.5079],[127.0362,37.4818],[127.0435,37.4828],[127.0471,37.4745],[127.0532,37.4687],[127.0517,37.4677],[127.0559,37.4659],[127.0637,37.4662],[127.0646,37.47],[127.0719,37.4724],[127.076,37.4701],[127.0793,37.4722],[127.0864,37.4727],[127.0873,37.4688],[127.1002,37.4559],[127.1056,37.4568],[127.1084,37.4597],[127.1189,37.4558],[127.1193,37.459],[127.1236,37.4615],[127.1244,37.4644],[127.1112,37.4857],[127.0989,37.493],[127.0733,37.5007],[127.0691,37.5223],[127.0587,37.5263]]},
+{n:"송파구",s:"서울",c:[127.1174,37.502],r:[[127.0721,37.502],[127.0765,37.4986],[127.0989,37.493],[127.1078,37.4886],[127.1244,37.4624],[127.1273,37.4642],[127.1271,37.4667],[127.1308,37.4651],[127.1375,37.4665],[127.1328,37.4686],[127.1328,37.4726],[127.1411,37.4706],[127.1442,37.4737],[127.1515,37.4756],[127.1539,37.4848],[127.1603,37.4877],[127.1635,37.4974],[127.1597,37.5003],[127.1586,37.4991],[127.1522,37.5017],[127.1477,37.5006],[127.1432,37.5026],[127.1424,37.507],[127.1455,37.5109],[127.1418,37.5127],[127.1475,37.5137],[127.1212,37.5253],[127.1253,37.5357],[127.1117,37.5407],[127.1009,37.5248],[127.0797,37.5208],[127.0691,37.5223]]},
+{n:"강동구",s:"서울",c:[127.1491,37.5484],r:[[127.116,37.5505],[127.1142,37.5447],[127.1117,37.5407],[127.1206,37.5381],[127.1253,37.5357],[127.1212,37.5253],[127.1467,37.5142],[127.1479,37.5192],[127.1498,37.5193],[127.1517,37.5231],[127.1554,37.5265],[127.1557,37.5312],[127.1653,37.5422],[127.1683,37.5415],[127.1693,37.5425],[127.1777,37.5424],[127.1812,37.5438],[127.1836,37.5424],[127.1857,37.543],[127.1848,37.5453],[127.1853,37.5489],[127.1835,37.5501],[127.1841,37.5581],[127.1775,37.5745],[127.1798,37.578],[127.1761,37.5768],[127.1668,37.5767],[127.1551,37.5709],[127.1359,37.5656],[127.1244,37.5614],[127.1188,37.5572],[127.1152,37.5575]]},
+{n:"과천시",s:"경기",c:[127.0052,37.4309],r:[[126.9843,37.4537],[126.9829,37.4502],[126.9761,37.4448],[126.9665,37.4428],[126.9652,37.4382],[126.9671,37.4359],[126.9637,37.4319],[126.9648,37.4182],[126.9661,37.4163],[126.9753,37.4131],[126.9778,37.4086],[126.978,37.403],[126.9807,37.4025],[126.9804,37.4005],[126.9847,37.3979],[126.9879,37.4038],[126.992,37.4052],[126.997,37.4024],[127.0019,37.4018],[127.0086,37.4059],[127.0106,37.4094],[127.014,37.4093],[127.0155,37.411],[127.0303,37.4093],[127.0438,37.4128],[127.0438,37.4243],[127.0496,37.4281],[127.0432,37.4353],[127.0379,37.4365],[127.0375,37.4384],[127.0405,37.4427],[127.0383,37.4488],[127.0392,37.4525],[127.0357,37.4587],[127.0367,37.4612],[127.032,37.4626],[127.0282,37.4557],[127.02,37.4528],[127.0132,37.4526],[127.0055,37.4645],[127.0001,37.4646],[126.9984,37.4639],[126.9989,37.4594],[126.9907,37.4553]]},
+{n:"의왕시",s:"경기",c:[126.9917,37.3596],r:[[127.0303,37.4093],[127.0155,37.411],[127.0019,37.4018],[126.9923,37.4052],[126.9879,37.4038],[126.9816,37.3931],[126.9838,37.3912],[126.9763,37.386],[126.9743,37.3784],[126.9675,37.3692],[126.9684,37.3596],[126.9641,37.3587],[126.9617,37.3454],[126.9565,37.3382],[126.9507,37.3373],[126.9471,37.3175],[126.9392,37.3195],[126.9317,37.3142],[126.9351,37.3055],[126.9325,37.3042],[126.9336,37.301],[126.9456,37.2975],[126.9564,37.3003],[126.9663,37.2999],[126.9721,37.3141],[126.969,37.3213],[126.9733,37.329],[126.9849,37.3239],[127.0026,37.3357],[127.0112,37.336],[127.0148,37.3446],[127.0206,37.3476],[127.0182,37.3544],[127.0294,37.3663],[127.0295,37.374],[127.0332,37.3766],[127.0359,37.3859],[127.0408,37.3883],[127.0395,37.3983],[127.0456,37.4008],[127.0448,37.4053],[127.049,37.4084],[127.049,37.4107],[127.0438,37.4128]]},
+{n:"안양시",s:"경기",c:[126.9297,37.3998],r:[[126.9108,37.431],[126.9049,37.4313],[126.9017,37.4346],[126.8999,37.4282],[126.8962,37.4262],[126.8989,37.4243],[126.896,37.4176],[126.891,37.4161],[126.8911,37.4086],[126.8811,37.4062],[126.8736,37.4098],[126.8726,37.4083],[126.8729,37.4039],[126.8795,37.4019],[126.88,37.3938],[126.8775,37.3924],[126.884,37.3734],[126.8933,37.3724],[126.8978,37.3572],[126.9033,37.354],[126.9095,37.3573],[126.9164,37.3725],[126.9343,37.375],[126.9422,37.373],[126.9429,37.3763],[126.9488,37.3728],[126.9476,37.3702],[126.9524,37.3646],[126.9591,37.3632],[126.9642,37.3587],[126.9682,37.3594],[126.9678,37.3699],[126.9763,37.386],[126.9839,37.3916],[126.9816,37.3931],[126.9847,37.3979],[126.978,37.403],[126.9758,37.4124],[126.9648,37.4182],[126.9637,37.4319],[126.9665,37.4376],[126.9415,37.4332],[126.9405,37.4377],[126.9308,37.4474]]},
+{n:"부천시",s:"경기",c:[126.791,37.5013],r:[[126.8269,37.5055],[126.8252,37.5132],[126.8279,37.5216],[126.8309,37.5237],[126.8239,37.532],[126.8242,37.5379],[126.8049,37.5403],[126.7966,37.533],[126.7969,37.5387],[126.7939,37.539],[126.7939,37.541],[126.7732,37.5459],[126.7698,37.5514],[126.7632,37.5364],[126.7623,37.5136],[126.7476,37.5118],[126.7438,37.5061],[126.7462,37.499],[126.7437,37.4923],[126.7445,37.4839],[126.7552,37.4815],[126.7616,37.4738],[126.7674,37.4722],[126.7699,37.4689],[126.7863,37.4698],[126.7916,37.463],[126.796,37.4631],[126.8061,37.4588],[126.8104,37.4596],[126.8139,37.4561],[126.8192,37.4589],[126.82,37.4563],[126.8273,37.456],[126.8297,37.4604],[126.8351,37.4629],[126.8355,37.4741],[126.8238,37.4725],[126.8214,37.4814],[126.8256,37.485],[126.8248,37.4872],[126.8165,37.4903],[126.8148,37.4938],[126.8208,37.4959],[126.825,37.503]]},
+{n:"광명시",s:"경기",c:[126.8674,37.4428],r:[[126.8351,37.4629],[126.8281,37.4566],[126.8366,37.4571],[126.8409,37.4529],[126.8398,37.4346],[126.8438,37.4316],[126.8484,37.4097],[126.8542,37.4071],[126.8552,37.3998],[126.8791,37.3992],[126.8778,37.4038],[126.8727,37.4041],[126.8733,37.4097],[126.8811,37.4062],[126.8911,37.4086],[126.891,37.4161],[126.896,37.4176],[126.9027,37.4371],[126.8962,37.4498],[126.8883,37.4536],[126.8874,37.4573],[126.8912,37.4587],[126.8755,37.4819],[126.8793,37.4851],[126.875,37.4855],[126.8765,37.4883],[126.8707,37.4924],[126.8547,37.4791],[126.8486,37.4789],[126.8474,37.471],[126.8355,37.4741]]},
+{n:"시흥시",s:"경기",c:[126.7898,37.3862],r:[[126.7804,37.448],[126.7704,37.4409],[126.7724,37.4262],[126.7553,37.4198],[126.7529,37.4051],[126.7366,37.3892],[126.7439,37.3808],[126.7327,37.3844],[126.7039,37.3481],[126.6872,37.3421],[126.6932,37.3353],[126.6892,37.3308],[126.7249,37.3106],[126.7406,37.3269],[126.7497,37.322],[126.7517,37.3306],[126.7623,37.3382],[126.7895,37.3357],[126.7975,37.3527],[126.8181,37.3527],[126.8285,37.3613],[126.8669,37.3587],[126.884,37.3734],[126.8791,37.3992],[126.8552,37.3998],[126.8484,37.4097],[126.8394,37.455],[126.8139,37.4561],[126.7916,37.463],[126.7863,37.4698],[126.7802,37.469],[126.7799,37.4564]]},
+{n:"안산시",s:"경기",c:[126.8353,37.316],r:[[126.8285,37.3613],[126.8075,37.3506],[126.7975,37.3527],[126.786,37.3346],[126.7623,37.3382],[126.7497,37.322],[126.7406,37.3269],[126.7192,37.3047],[126.7747,37.2866],[126.8184,37.2952],[126.8298,37.2888],[126.8301,37.277],[126.8493,37.2629],[126.8551,37.2695],[126.8788,37.2749],[126.8818,37.2828],[126.893,37.2792],[126.9005,37.2912],[126.9159,37.2886],[126.9295,37.276],[126.9416,37.2925],[126.9325,37.3042],[126.9175,37.3027],[126.9178,37.3127],[126.9098,37.3191],[126.89,37.3149],[126.8754,37.3203],[126.8993,37.3552],[126.8933,37.3724],[126.8844,37.3736],[126.8669,37.3587],[126.8428,37.3609]]},
+{n:"군포시",s:"경기",c:[126.9231,37.3405],r:[[126.9492,37.3672],[126.9488,37.3728],[126.9429,37.3763],[126.9422,37.373],[126.9343,37.375],[126.9164,37.3725],[126.9095,37.3573],[126.9062,37.3542],[126.8995,37.3553],[126.8962,37.3529],[126.8896,37.3448],[126.8874,37.3354],[126.8752,37.3269],[126.8763,37.318],[126.8802,37.3166],[126.8853,37.318],[126.89,37.3149],[126.9098,37.3191],[126.9139,37.3155],[126.9128,37.3137],[126.9178,37.3127],[126.9175,37.3027],[126.9349,37.3049],[126.9317,37.3142],[126.9392,37.3195],[126.9471,37.3175],[126.9507,37.3373],[126.953,37.3391],[126.9565,37.3382],[126.9617,37.3454],[126.9642,37.3587]]},
+{n:"성남시",s:"경기",c:[127.1182,37.4046],r:[[127.0395,37.3983],[127.0408,37.3883],[127.03,37.3693],[127.0723,37.3552],[127.0797,37.3463],[127.0883,37.3487],[127.1125,37.3318],[127.1394,37.3369],[127.1361,37.3557],[127.1523,37.3585],[127.1638,37.3769],[127.1788,37.3823],[127.1704,37.3899],[127.1791,37.4118],[127.187,37.4125],[127.1968,37.4226],[127.1975,37.446],[127.1937,37.4546],[127.1837,37.4577],[127.1832,37.4705],[127.1674,37.4661],[127.1352,37.4729],[127.1375,37.4665],[127.1271,37.4667],[127.1189,37.4558],[127.0984,37.4586],[127.0901,37.4423],[127.0738,37.439],[127.0727,37.4271],[127.0441,37.4247],[127.0458,37.4014]]},
+{n:"고양시",s:"경기",c:[126.8378,37.6622],r:[[126.8163,37.7207],[126.8003,37.7344],[126.7759,37.7016],[126.7271,37.7017],[126.6936,37.6865],[126.6786,37.6973],[126.6684,37.6833],[126.6755,37.6721],[126.8598,37.5718],[126.878,37.5768],[126.8872,37.5911],[126.9019,37.5871],[126.9146,37.6389],[126.9074,37.6461],[126.9234,37.6428],[126.9494,37.6561],[126.9773,37.6286],[126.9885,37.6379],[126.9815,37.653],[126.9963,37.6635],[126.9959,37.6721],[126.9842,37.6826],[126.9565,37.6899],[126.9448,37.6693],[126.9101,37.6675],[126.9268,37.7051],[126.931,37.7464],[126.9109,37.7442],[126.9043,37.7257],[126.8882,37.7157],[126.8587,37.7329],[126.8377,37.7253]]},
+{n:"김포시",s:"경기",c:[126.6296,37.6747],r:[[126.6691,37.7817],[126.641,37.7757],[126.6115,37.7501],[126.571,37.7523],[126.5609,37.7648],[126.5384,37.7691],[126.5166,37.7642],[126.5299,37.7456],[126.5206,37.71],[126.5293,37.7004],[126.5255,37.6717],[126.5378,37.6622],[126.531,37.6502],[126.5516,37.6243],[126.5657,37.5842],[126.6152,37.6028],[126.6275,37.5998],[126.6384,37.625],[126.6489,37.625],[126.6545,37.6369],[126.6821,37.6269],[126.7272,37.5892],[126.7457,37.5906],[126.7539,37.5768],[126.7694,37.5852],[126.7958,37.5788],[126.807,37.6012],[126.8006,37.6077],[126.672,37.6751],[126.6684,37.685],[126.6875,37.72],[126.6782,37.7522]]},
+{n:"하남시",s:"경기",c:[127.208,37.5199],r:[[127.1798,37.578],[127.1775,37.5745],[127.1857,37.543],[127.1653,37.5422],[127.1479,37.5192],[127.1475,37.5133],[127.1418,37.5127],[127.1455,37.5109],[127.1432,37.5026],[127.1635,37.4974],[127.1515,37.4756],[127.1421,37.4709],[127.171,37.4661],[127.1832,37.4705],[127.1776,37.474],[127.1796,37.4827],[127.1905,37.4775],[127.2179,37.4795],[127.2396,37.4721],[127.2483,37.475],[127.2613,37.488],[127.2565,37.5032],[127.275,37.5043],[127.2822,37.51],[127.2897,37.5107],[127.2869,37.5187],[127.2388,37.5433],[127.2358,37.5559],[127.2019,37.5881],[127.1857,37.5887],[127.1668,37.5767]]},
+{n:"구리시",s:"경기",c:[127.1329,37.5977],r:[[127.1142,37.6298],[127.1075,37.6243],[127.1056,37.6201],[127.1192,37.615],[127.1201,37.6018],[127.1159,37.5972],[127.1205,37.5922],[127.1151,37.5903],[127.1114,37.5819],[127.0994,37.5798],[127.1049,37.579],[127.103,37.5706],[127.1063,37.5683],[127.1033,37.5572],[127.1188,37.5572],[127.1244,37.5614],[127.1601,37.5733],[127.1668,37.5767],[127.1662,37.5863],[127.1713,37.5893],[127.1701,37.5914],[127.1569,37.5939],[127.1524,37.5984],[127.1451,37.621],[127.1465,37.6262],[127.1518,37.6311],[127.1524,37.6369],[127.1488,37.641],[127.143,37.6435],[127.1327,37.6384],[127.1175,37.6412],[127.1133,37.6396]]},
+{n:"남양주시",s:"경기",c:[127.245,37.6606],r:[[127.2619,37.7656],[127.2275,37.7507],[127.2155,37.7645],[127.1306,37.745],[127.125,37.7191],[127.0833,37.6947],[127.0979,37.6861],[127.0988,37.6581],[127.0881,37.6531],[127.0966,37.643],[127.143,37.6435],[127.1524,37.6369],[127.1454,37.6183],[127.1531,37.5973],[127.1712,37.5901],[127.1668,37.5767],[127.1857,37.5887],[127.2028,37.5876],[127.2384,37.5436],[127.2838,37.5219],[127.2929,37.5041],[127.3092,37.5136],[127.311,37.5378],[127.3813,37.6718],[127.3691,37.6854],[127.3743,37.6892],[127.3556,37.701],[127.3576,37.7209],[127.345,37.7267],[127.3298,37.7571],[127.3058,37.7707],[127.2687,37.7777]]},
+{n:"용인시",s:"경기",c:[127.2245,37.2183],r:[[127.2034,37.3258],[127.1937,37.3444],[127.1191,37.3306],[127.0473,37.3659],[127.0182,37.3544],[127.0627,37.2938],[127.0934,37.293],[127.0668,37.2683],[127.0876,37.2677],[127.0719,37.2259],[127.1598,37.2046],[127.1614,37.1751],[127.1351,37.1662],[127.1111,37.1237],[127.125,37.0886],[127.1945,37.0842],[127.2114,37.1094],[127.2533,37.1203],[127.266,37.153],[127.3078,37.1043],[127.3288,37.1166],[127.3549,37.0972],[127.3912,37.1055],[127.4183,37.0902],[127.432,37.1449],[127.4134,37.1805],[127.3845,37.1799],[127.3323,37.2174],[127.3409,37.2677],[127.2781,37.2708],[127.2854,37.3425],[127.2216,37.3518]]},
+{n:"수원시",s:"경기",c:[127.0104,37.2775],r:[[127.0112,37.336],[126.9849,37.3239],[126.9733,37.329],[126.9663,37.2999],[126.9349,37.3001],[126.9416,37.2925],[126.9312,37.2827],[126.9311,37.2608],[126.9372,37.2541],[126.9521,37.253],[126.9725,37.2264],[126.9902,37.2308],[127.0238,37.2215],[127.025,37.2272],[127.0396,37.2339],[127.0428,37.2444],[127.0412,37.2344],[127.0547,37.2282],[127.0845,37.2472],[127.0876,37.2677],[127.0775,37.2631],[127.079,37.2586],[127.0668,37.2683],[127.071,37.2758],[127.0909,37.2841],[127.092,37.2956],[127.08,37.2907],[127.0627,37.2938],[127.0598,37.3127],[127.0427,37.3173],[127.0356,37.3419],[127.0209,37.3487]]},
+{n:"동구",s:"인천",c:[126.6406,37.4807],r:[[126.6431,37.4928],[126.6295,37.4904],[126.6338,37.4847],[126.6283,37.4897],[126.6262,37.4893],[126.6261,37.4866],[126.6252,37.4891],[126.6204,37.4876],[126.621,37.4861],[126.6182,37.487],[126.6193,37.4843],[126.6173,37.4863],[126.6152,37.4856],[126.6163,37.483],[126.614,37.4853],[126.6119,37.4846],[126.6137,37.4807],[126.6215,37.4831],[126.6188,37.4808],[126.6224,37.4779],[126.6262,37.4784],[126.6301,37.4766],[126.6447,37.4656],[126.6443,37.4675],[126.6541,37.4669],[126.6534,37.4717],[126.6565,37.4758],[126.655,37.4789],[126.6571,37.4813],[126.6726,37.474],[126.6731,37.475],[126.6467,37.4912]]},
+{n:"미추홀구",s:"인천",c:[126.6669,37.4501],r:[[126.6571,37.4813],[126.655,37.4789],[126.6565,37.4758],[126.6534,37.4717],[126.6547,37.4704],[126.6545,37.4671],[126.6442,37.4674],[126.6454,37.4651],[126.6439,37.4647],[126.6442,37.4622],[126.6412,37.4607],[126.6348,37.451],[126.6312,37.4494],[126.6321,37.4472],[126.631,37.4458],[126.6336,37.4386],[126.6347,37.4387],[126.6367,37.4282],[126.6379,37.429],[126.6393,37.4278],[126.6427,37.4276],[126.6467,37.429],[126.6502,37.4323],[126.6618,37.433],[126.6768,37.4275],[126.6797,37.4288],[126.6877,37.4274],[126.6892,37.4304],[126.6988,37.4306],[126.697,37.436],[126.7044,37.4361],[126.705,37.4404],[126.6979,37.4421],[126.6949,37.4453],[126.6967,37.456],[126.6993,37.4585],[126.6948,37.4629],[126.6889,37.4634],[126.6893,37.4662],[126.6864,37.4667],[126.6881,37.4692],[126.6861,37.4705],[126.6726,37.474]]},
+{n:"연수구",s:"인천",c:[126.6505,37.3882],r:[[126.697,37.436],[126.6988,37.4306],[126.6892,37.4304],[126.6877,37.4274],[126.6768,37.4275],[126.6618,37.433],[126.6502,37.4323],[126.6427,37.4276],[126.6379,37.429],[126.6001,37.4255],[126.6001,37.3819],[126.6138,37.3709],[126.614,37.3525],[126.6094,37.3524],[126.6095,37.3445],[126.6193,37.3445],[126.6194,37.34],[126.6631,37.3404],[126.718,37.3763],[126.7198,37.3783],[126.7135,37.3782],[126.7123,37.3803],[126.6889,37.3843],[126.6858,37.383],[126.6869,37.3846],[126.6698,37.3895],[126.6865,37.4018],[126.6897,37.4084],[126.7066,37.4226],[126.7083,37.431],[126.7067,37.436],[126.7044,37.4361]]},
+{n:"남동구",s:"인천",c:[126.7288,37.4278],r:[[126.7698,37.469],[126.7484,37.4617],[126.7405,37.4681],[126.7326,37.4697],[126.7237,37.4679],[126.713,37.4768],[126.7101,37.4665],[126.6997,37.4653],[126.6881,37.4692],[126.6889,37.4634],[126.6948,37.4629],[126.6993,37.4585],[126.6949,37.4453],[126.705,37.4404],[126.7073,37.4242],[126.6893,37.408],[126.6865,37.4018],[126.6698,37.3895],[126.6869,37.3846],[126.6858,37.383],[126.723,37.3783],[126.7479,37.3984],[126.7571,37.4152],[126.7553,37.4198],[126.761,37.424],[126.7646,37.4223],[126.7724,37.4262],[126.7704,37.4409],[126.7738,37.4475],[126.7804,37.448],[126.7819,37.4515],[126.7802,37.469]]},
+{n:"부평구",s:"인천",c:[126.7234,37.494],r:[[126.6885,37.5205],[126.6854,37.5119],[126.6943,37.499],[126.6916,37.4955],[126.6949,37.4928],[126.6936,37.49],[126.7002,37.4877],[126.7035,37.4825],[126.6947,37.4825],[126.6919,37.4802],[126.6932,37.4761],[126.6861,37.4705],[126.7054,37.4651],[126.7101,37.4665],[126.713,37.4768],[126.7237,37.4679],[126.7326,37.4697],[126.7405,37.4681],[126.7484,37.4617],[126.7566,37.4629],[126.759,37.4664],[126.7685,37.4671],[126.7694,37.4703],[126.7616,37.4738],[126.7576,37.48],[126.7445,37.4839],[126.7462,37.499],[126.7438,37.5061],[126.7476,37.5118],[126.7623,37.5136],[126.7624,37.5213],[126.6926,37.5208]]},
+{n:"계양구",s:"인천",c:[126.7372,37.5543],r:[[126.7694,37.5852],[126.7539,37.5768],[126.7457,37.5906],[126.7411,37.5909],[126.7378,37.5874],[126.7272,37.5892],[126.7154,37.5749],[126.6839,37.5806],[126.6844,37.5745],[126.7011,37.5706],[126.7008,37.565],[126.7055,37.5615],[126.7016,37.5561],[126.7131,37.5513],[126.709,37.5401],[126.6942,37.5383],[126.6938,37.5329],[126.6857,37.5324],[126.685,37.5283],[126.6926,37.5208],[126.7624,37.5213],[126.7632,37.5364],[126.7698,37.5514],[126.7664,37.5525],[126.7748,37.5544],[126.7777,37.559],[126.78,37.5571],[126.777,37.5651],[126.7823,37.5645],[126.785,37.5709],[126.7954,37.5744],[126.7958,37.5788]]},
+{n:"서구",s:"인천",c:[126.6541,37.5578],r:[[126.6489,37.625],[126.6384,37.625],[126.6275,37.5998],[126.6145,37.6026],[126.5746,37.585],[126.5958,37.5515],[126.6081,37.5513],[126.6012,37.5306],[126.613,37.5248],[126.6155,37.51],[126.6062,37.5073],[126.6065,37.494],[126.6289,37.4944],[126.6432,37.5029],[126.643,37.4928],[126.6861,37.4705],[126.7036,37.4838],[126.6936,37.49],[126.6853,37.5138],[126.6926,37.5208],[126.6847,37.5302],[126.709,37.5401],[126.7131,37.5513],[126.6839,37.5806],[126.7154,37.5749],[126.7273,37.5893],[126.7178,37.6003],[126.7062,37.5999],[126.7074,37.6087],[126.6821,37.6269],[126.6561,37.6353]]}
+];
+
+// 한강 본류(팔당→서울→김포). 사람이 자기 위치를 잡는 데 가장 큰 단서다.
+// © OpenStreetMap contributors (ODbL 1.0)
+const HANGANG=[[127.3105,37.5249],[127.3023,37.5104],[127.2904,37.5107],[127.283,37.5248],[127.2367,37.5465],[127.2222,37.5671],[127.2005,37.5846],[127.1912,37.5871],[127.1264,37.5657],[127.1196,37.5586],[127.1125,37.5428],[127.0894,37.5238],[127.0674,37.5243],[127.054,37.5312],[127.0277,37.5382],[127.0216,37.5366],[127.0047,37.5207],[126.9907,37.5129],[126.9777,37.5114],[126.9606,37.5156],[126.9505,37.5205],[126.9351,37.5347],[126.9112,37.5393],[126.9028,37.5413],[126.8918,37.5474],[126.8605,37.5668],[126.8225,37.588],[126.8163,37.594],[126.7949,37.6123],[126.7217,37.6466],[126.6739,37.6758],[126.6663,37.6889],[126.6685,37.7042],[126.6788,37.7295],[126.6748,37.7565],[126.664,37.772],[126.6522,37.781],[126.6376,37.7838],[126.6252,37.7821],[126.6161,37.7775],[126.6035,37.7653],[126.5751,37.7626],[126.5497,37.7813],[126.4685,37.8119],[126.4568,37.8199],[126.4532,37.828],[126.4422,37.837],[126.4136,37.8447]];
+
+// 시설의 city 와 구 이름을 맞춘다 ("인천 미추홀" → "미추홀구")
+const normName=s=>String(s||"").trim().split(/\s+/).pop().replace(/(특별시|광역시|시|군|구)$/,"");
+DISTRICTS.forEach(d=>{d.key=normName(d.n);});
+
+// 이음매 스냅.
+// 같은 경계인데 구마다 좌표가 10~150m 씩 어긋나 적혀 있다
+// (고양 [126.9494,37.6561] vs 은평 [126.9484,37.6561] — 89m). 문자열이 다르니
+// 용접이 시도조차 되지 않는다. 다른 구의 가까운 꼭짓점끼리 묶어 대표 하나로 통일한다.
+// **같은 구 안에서는 묶지 않는다** — 해안선 잔주름까지 뭉개진다.
+function snapVertices(ds,tol){
+  const pts=[];                       // [lng,lat,구인덱스]
+  ds.forEach((d,di)=>d.r.forEach(p=>pts.push([p[0],p[1],di])));
+  const gk=(a,b)=>Math.round(a/tol)+":"+Math.round(b/tol);
+  const grid={};
+  pts.forEach((p,i)=>{const k=gk(p[0],p[1]);(grid[k]||(grid[k]=[])).push(i);});
+  const par=pts.map((_,i)=>i);
+  const find=i=>{while(par[i]!==i){par[i]=par[par[i]];i=par[i];}return i;};
+  const t2=tol*tol, cand=[];
+  pts.forEach((p,i)=>{
+    const cx=Math.round(p[0]/tol), cy=Math.round(p[1]/tol);
+    // 격자 경계에 걸친 짝을 놓치지 않으려면 이웃 9칸을 봐야 한다
+    for(let a=-1;a<=1;a++) for(let b=-1;b<=1;b++)
+      for(const j of (grid[(cx+a)+":"+(cy+b)]||[])){
+        if(j<=i) continue;
+        const q=pts[j];
+        if(q[2]===p[2]) continue;
+        const dx=q[0]-p[0], dy=q[1]-p[1], d2=dx*dx+dy*dy;
+        if(d2<=t2) cand.push([d2,i,j]);
+      }
+  });
+  // 가까운 짝부터 붙인다. 순서를 안 정하면 먼 짝이 먼저 자리를 차지해
+  // 정작 좌표가 완전히 같은 짝이 아래 clash 검사에 걸려 튕긴다.
+  cand.sort((a,b)=>a[0]-b[0]);
+  // 한 덩어리에 같은 구의 점이 둘 들어가면 안 된다. union-find 는 전이적이라
+  // "다른 구끼리만 묶는다"는 검사만으로는 A—B—A 체인이 그대로 통과한다.
+  // 그러면 한 링에 같은 좌표가 떨어져서 두 번 생기고, 면적 0 짜리 바늘이 돋는다.
+  const dset=pts.map(p=>new Set([p[2]]));
+  for(const [,i,j] of cand){
+    const ra=find(i), rb=find(j);
+    if(ra===rb) continue;
+    let clash=false;
+    for(const x of dset[rb]) if(dset[ra].has(x)){clash=true;break;}
+    if(clash) continue;
+    par[rb]=ra;
+    for(const x of dset[rb]) dset[ra].add(x);
+    dset[rb]=null;
+  }
+  // 대표는 무게중심에 가장 가까운 멤버. 루트를 그냥 쓰면 대표가 병합 순서에
+  // 좌우돼서, 덩어리 지름만큼(300m+) 엉뚱하게 끌려가는 점이 생긴다.
+  const mem={};
+  pts.forEach((p,i)=>{const r=find(i);(mem[r]||(mem[r]=[])).push(i);});
+  const rep={};
+  for(const r in mem){
+    const g=mem[r];
+    const mx=g.reduce((s,i)=>s+pts[i][0],0)/g.length;
+    const my=g.reduce((s,i)=>s+pts[i][1],0)/g.length;
+    let bi=g[0], bd=Infinity;
+    for(const i of g){const dx=pts[i][0]-mx, dy=pts[i][1]-my, d=dx*dx+dy*dy;
+      if(d<bd){bd=d;bi=i;}}
+    rep[r]=[pts[bi][0],pts[bi][1]];
+  }
+  let k=0;
+  ds.forEach(d=>{
+    const out=[], src=d.r;
+    for(let i=0;i<src.length;i++){
+      const q=rep[find(k++)], last=out[out.length-1];
+      // 스냅으로 이웃 점끼리 겹쳤으면 하나만 남긴다
+      if(!last||last[0]!==q[0]||last[1]!==q[1]) out.push(q);
+    }
+    if(out.length>1&&out[0][0]===out[out.length-1][0]&&out[0][1]===out[out.length-1][1]) out.pop();
+    // 방어선. 위 clash 가드가 성립하는 한 발동하지 않는다 —
+    // 그래도 링에 같은 점이 떨어져서 두 번 남았거나 너무 줄었으면 손대지 않는다.
+    // 어긋난 이음매보다 자기교차한 폴리곤이 훨씬 흉하다.
+    const seen=new Set(); let bad=out.length<3;
+    for(const q of out){const s=q[0]+","+q[1]; if(seen.has(s)){bad=true;break;} seen.add(s);}
+    if(!bad) d.r=out;
+  });
+}
+// 0.0017 ≈ 170m. 실제로 메워야 할 최대 어긋남이 152m(의왕/수원)이고,
+// 그 위 첫 후보가 0.00171(성동/동대문 — 붙으면 안 되는 짝)이라 창이 좁다. 함부로 넓히지 말 것.
+snapVertices(DISTRICTS,0.0017);
+
+// 이음매 용접.
+// 구 폴리곤이 각자 따로 간략화돼서 맞닿은 변이 서로 어긋나 있다. 의왕은
+// [127.0026,37.3357] 을 거쳐 가는데 수원은 그 구간을 직선으로 지른다 — 그 사이
+// 0.35km 쐐기만큼 수원 윗면이 늦게 시작해서, 의왕의 어두운 옆면이 그대로 드러난다.
+// 지도가 그 자리에서 찢어져 보이는 게 이 때문이다.
+//
+// 공유 꼭짓점 두 개 사이를 한쪽만 우회하고 있으면 그 우회점을 상대 쪽에도 심어
+// 두 변을 글자 그대로 같은 선으로 만든다. 좌표를 지어내는 게 아니라 옮겨 심는 것뿐이다.
+// 그래야 앞 블록 윗면이 뒤 블록 옆면을 빈틈없이 덮는다.
+function weldSeams(ds){
+  const key=p=>p[0]+","+p[1];
+  const at={};                        // 꼭짓점 → 그 점을 가진 (구, 인덱스) 목록
+  ds.forEach((d,di)=>d.r.forEach((p,vi)=>{(at[key(p)]||(at[key(p)]=[])).push([di,vi]);}));
+  const span=(ring,i,j)=>{            // i 에서 j 까지 앞으로 진행한 인덱스 열
+    const out=[],n=ring.length;
+    for(let k=i;out.length<=n;k=(k+1)%n){out.push(k);if(k===j)return out;}
+    return null;
+  };
+  const off=(p,a,b)=>{                // 선분 ab 에서 p 까지 수직거리(도)
+    const dx=b[0]-a[0],dy=b[1]-a[1],L=dx*dx+dy*dy;
+    if(!L) return Math.hypot(p[0]-a[0],p[1]-a[1]);
+    const t=Math.max(0,Math.min(1,((p[0]-a[0])*dx+(p[1]-a[1])*dy)/L));
+    return Math.hypot(p[0]-a[0]-t*dx,p[1]-a[1]-t*dy);
+  };
+  let welded=0;
+  const next=ds.map(d=>{
+    const out=[];
+    for(let i=0;i<d.r.length;i++){
+      const P=d.r[i], Q=d.r[(i+1)%d.r.length];
+      out.push(P);
+      let best=null;
+      for(const [bi,bp] of (at[key(P)]||[])){
+        if(ds[bi]===d) continue;
+        const hit=(at[key(Q)]||[]).find(([ci])=>ci===bi);
+        if(!hit) continue;
+        const B=ds[bi].r, f=span(B,bp,hit[1]), b=span(B,hit[1],bp);
+        if(!f||!b) continue;
+        const fwd=f.length<=b.length, seq=fwd?f:b;
+        let mids=seq.slice(1,-1).map(k=>B[k]);
+        if(!fwd) mids=mids.reverse();  // 맞닿은 변은 서로 반대 방향으로 감긴다
+        // 우회가 너무 길거나 멀면 손대지 않는다 — 엉뚱한 경계를 끌어올 수 있다
+        if(!mids.length||mids.length>8) continue;
+        if(mids.some(m=>off(m,P,Q)>0.008)) continue;   // 실제 정상 용접은 최대 0.0044
+        if(!best||mids.length>best.length) best=mids;
+      }
+      if(best){out.push(...best); welded+=best.length;}
+    }
+    return out;
+  });
+  ds.forEach((d,i)=>{d.r=next[i];});
+  return welded;
+}
+weldSeams(DISTRICTS);
+
+const hasGeo=f=>f.lat!=null&&f.lng!=null;
+let _landCache={};
+
+// ── 지도 뷰 (이동·확대) ──────────────────────────────────────
+// 투영은 건드리지 않고 viewBox 만 옮긴다. 캐시한 폴리곤 1,900점을
+// 다시 만들 필요가 없어 드래그가 부드럽고, 좌표계가 하나로 유지된다.
+let VIEW=null;                 // {x,y,k} — null 이면 아직 기준점에 맞추지 않았다
+let VIEWKEY="";                // 기준점이 바뀌면 뷰를 다시 잡는다
+let _lastMs="", _lastSvg=null; // 마커 스케일 재기록을 아끼기 위한 기억
+const ZMIN=1, ZMAX=6;
+const K0=1.9;                  // 첫 화면 배율. 마커 크기 기준점이기도 하다
+
+function clampView(){
+  const w=MAPW/VIEW.k, h=MAPH/VIEW.k;
+  // 여백은 **화면 크기에 비례**해야 한다. 상수로 두면 확대할수록 빈 곳으로 다 빠져
+  // k=2 만 돼도 지도를 통째로 잃을 수 있다. 늘 최소 절반은 지도가 보이게 묶는다.
+  const px=w*.5, py=h*.5;
+  VIEW.x = w>=MAPW ? (MAPW-w)/2 : Math.min(Math.max(VIEW.x,-px),MAPW+px-w);
+  VIEW.y = h>=MAPH ? (MAPH-h)/2 : Math.min(Math.max(VIEW.y,-py),MAPH+py-h);
+}
+function applyView(svg){
+  if(!svg||!VIEW) return;
+  clampView();
+  svg.setAttribute("viewBox",
+    `${VIEW.x.toFixed(1)} ${VIEW.y.toFixed(1)} ${(MAPW/VIEW.k).toFixed(1)} ${(MAPH/VIEW.k).toFixed(1)}`);
+  // 마커만 역스케일해 화면 크기를 유지한다. 지도가 커지지 마커가 커지는 게 아니다.
+  // 기준점은 k=1 이 아니라 첫 화면 배율(K0) — 그래야 처음 보이는 크기가 그대로다.
+  // 0.88 제곱이라 확대하면 아주 조금은 따라 커진다 (딱딱해 보이지 않게).
+  const ms=Math.pow(K0/VIEW.k,0.88).toFixed(3);
+  if(ms!==_lastMs||svg!==_lastSvg){        // 배율이 그대로인 pan 에서는 다시 쓰지 않는다
+    _lastMs=ms; _lastSvg=svg;
+    svg.querySelectorAll(".mp").forEach(g=>{
+      g.setAttribute("transform",`translate(${g.dataset.x} ${g.dataset.y}) scale(${ms})`);
+    });
+  }
+  const z=document.getElementById("zin"), o=document.getElementById("zout");
+  if(z) z.disabled=VIEW.k>=ZMAX;
+  if(o) o.disabled=VIEW.k<=ZMIN;
+}
+// 화면 한 점을 붙잡은 채 배율만 바꾼다 (버튼은 화면 중앙 기준)
+function zoomAt(k2,tX,tY){
+  const w=MAPW/VIEW.k, h=MAPH/VIEW.k;
+  const fx=VIEW.x+tX*w, fy=VIEW.y+tY*h;
+  VIEW.k=Math.min(ZMAX,Math.max(ZMIN,k2));
+  VIEW.x=fx-tX*(MAPW/VIEW.k); VIEW.y=fy-tY*(MAPH/VIEW.k);
+  applyView(document.querySelector(".mapsvg"));
+}
+
+// 카메라 각도.
+//   TILT — 1이면 완전한 수직 부감(평면), 작을수록 눕는다.
+//          0.577(=tan30°)이 교과서적 등축인데 너무 누워서 어느 구인지 못 읽었다.
+//          0.78 은 위에서 내려다보되 블록 옆면이 보일 만큼만 기울인 값.
+//   YAW  — 0이면 북쪽이 화면 위. 돌리면 입체감은 늘지만 지도 모양이 낯설어진다.
+const TILT=0.78, YAW=0;
+// 블록 두께는 전부 같다. 열린 수는 **색의 진하기**만으로 말한다 —
+// 높이까지 쓰면 뒤 블록이 가려지고 축척이 흔들리는데, 색만으로 충분히 읽힌다.
+const BLOCK_H=6;
+
+function makeIso(world,me,reserve){
+  // 내 위치도 화면 범위에 넣는다. 빼면 수영장 분포 밖에 있을 때 마커가 잘려
+  // "내가 어디쯤인지"를 못 본다 — 그게 이 지도의 첫 번째 용도다.
+  const anchors=world.concat(me&&me.lat!=null?[me]:[]);
+  const ls=anchors.map(p=>p.lat);
+  const kx=KMX*Math.cos((Math.min(...ls)+Math.max(...ls))/2*Math.PI/180);
+  const cy=Math.cos(YAW), sy=Math.sin(YAW);
+  // 지면을 YAW 만큼 돌린 뒤 세로만 TILT 로 누른다. 위에서 내려다본 그림이다.
+  const flat=(lat,lng)=>{
+    const x=lng*kx, y=lat*KMY;
+    return [x*cy-y*sy, -(x*sy+y*cy)*TILT];   // y 는 북쪽이 위로 오게 뒤집는다
+  };
+  const ps=anchors.map(p=>flat(p.lat,p.lng));
+  const pad=5;
+  const x0=Math.min(...ps.map(p=>p[0]))-pad, x1=Math.max(...ps.map(p=>p[0]))+pad;
+  const y0=Math.min(...ps.map(p=>p[1]))-pad, y1=Math.max(...ps.map(p=>p[1]))+pad;
+  // reserve = 블록 두께 + 라벨. 위쪽에 그만큼 비워야 잘리지 않는다.
+  const s=Math.min(MAPW/(x1-x0),(MAPH-reserve)/(y1-y0));
+  const ox=(MAPW-(x1-x0)*s)/2, oy=reserve+(MAPH-reserve-(y1-y0)*s)/2;
+  const pr=(lat,lng)=>{const [a,b]=flat(lat,lng);
+    return [(a-x0)*s+ox,(b-y0)*s+oy];};
+  // 화면 위쪽이 뒤쪽이다. 값이 클수록 뒤에 있다.
+  pr.depth=(lat,lng)=>lng*kx*sy+lat*KMY*cy;
+  return pr;
+}
+
+const topPath=(ring,pr,h)=>ring.map(([g,l],i)=>{
+  const [x,y]=pr(l,g); return (i?"L":"M")+x.toFixed(1)+" "+(y-h).toFixed(1);
+}).join("")+"Z";
+
+const linePath=(pts,pr,h)=>pts.map(([g,l],i)=>{
+  const [x,y]=pr(l,g); return (i?"L":"M")+x.toFixed(1)+" "+(y-h).toFixed(1);
+}).join("");
+
+// 블록 하나. 윗면 + 보이는 쪽 옆면만 그린다.
+function blockHTML(ring,pr,h,cls){
+  const top=ring.map(([g,l])=>{const [x,y]=pr(l,g);return [x,y-h];});
+  let a2=0;
+  for(let i=0;i<top.length;i++){const j=(i+1)%top.length;
+    a2+=top[i][0]*top[j][1]-top[j][0]*top[i][1];}
+  const sgn=a2>0?1:-1;          // 링 방향에 따라 바깥 법선의 부호가 뒤집힌다
+  let sides="";
+  for(let i=0;i<top.length;i++){
+    const j=(i+1)%top.length, A=top[i], B=top[j];
+    const ny=sgn*(A[0]-B[0]);   // 바깥 법선의 y 성분. x 변화만 관여한다
+    if(ny<=0) continue;         // 뒤쪽 벽은 그리지 않는다
+    sides+=`<path class="${cls} side" d="M${A[0].toFixed(1)} ${A[1].toFixed(1)}`
+      +`L${B[0].toFixed(1)} ${B[1].toFixed(1)}L${B[0].toFixed(1)} ${(B[1]+h).toFixed(1)}`
+      +`L${A[0].toFixed(1)} ${(A[1]+h).toFixed(1)}Z"/>`;
+  }
+  const face=top.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join("")+"Z";
+  return sides+`<path class="${cls} top" d="${face}"/>`;
+}
+
+function renderMap(all){
+  const wrap=document.getElementById("mapwrap");
+  // 말풍선은 SVG 를 갈아끼우기 전에 먼저 접는다. 조기 반환 경로에서도 남으면
+  // pointerleave 가 영영 안 와서 화면에 박제된다.
+  const tip=document.getElementById("maptip");
+  const hideTip=()=>{tip.classList.remove("on");tip.setAttribute("aria-hidden","true");};
+  hideTip();
+  document.getElementById("maploc").innerHTML=
+    ME?`<b>내 위치</b> 기준`:`<b>${esc((ORIGIN&&ORIGIN.name)||"기준점")}</b> 기준`;
+  const world=FACILITIES.filter(hasGeo);
+  const noGeo=FACILITIES.length-world.length;
+  if(!world.length){wrap.innerHTML="";
+    ["zin","zout","zreset"].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=true;});
+    document.getElementById("mapnote").textContent="좌표가 있는 시설이 없습니다.";return;}
+  // 구 색 = 그 구에서 지금 입수 가능한 수영장 수
+  const openBy={};
+  all.forEach(({f,r})=>{if(r.code==="open") openBy[normName(f.city)]=(openBy[normName(f.city)]||0)+1;});
+  const hasPool=new Set(FACILITIES.map(f=>normName(f.city)));
+
+  // 블록 높이가 고정이라 여백도 고정이다. 시간을 옮겨도 축척이 흔들리지 않는다.
+  const pr=makeIso(world,ME||ORIGIN,BLOCK_H+18);
+
+  // 블록 두께가 고정이라 **지형 기하는 개방 수와 무관하다.**
+  // 그래서 폴리곤(1,900점)은 투영이 바뀔 때만 다시 만들고,
+  // 시간에 따라 바뀌는 건 class 속성과 라벨뿐이다 — 슬라이더가 부드러워진다.
+  const anc=ME||ORIGIN;
+  // 투영은 전체 시설의 min/max 로 정해진다. 개수만 보면 좌표가 바뀌어도
+  // 낡은 폴리곤을 그대로 쓰게 되므로 경계값까지 키에 넣는다.
+  const bb=world.reduce((a,f)=>[Math.min(a[0],f.lat),Math.max(a[1],f.lat),
+    Math.min(a[2],f.lng),Math.max(a[3],f.lng)],[90,-90,180,-180]);
+  const geoKey=(anc&&anc.lat!=null?anc.lat.toFixed(4)+","+anc.lng.toFixed(4):"-")
+    +"|"+world.length+"|"+bb.map(v=>v.toFixed(3)).join(",");
+  let geo=_landCache[geoKey];
+  if(geo==null){
+    // 뒤(depth 큰 것)부터 그려야 앞 블록이 위에 온다.
+    geo=DISTRICTS.slice()
+      .sort((a,b)=>pr.depth(b.c[1],b.c[0])-pr.depth(a.c[1],a.c[0]))
+      .map(d=>({key:d.key,n:d.n,s:d.s,c:pr(d.c[1],d.c[0]),
+        top:topPath(d.r,pr,BLOCK_H),
+        svg:blockHTML(d.r,pr,BLOCK_H,"blk")}));
+    // 경계선 블롭은 시간에 따라 변하지 않는다 — 지형과 같이 캐시한다
+    geo.blob=["인천","서울"].map(s=>
+      `<g class="rim rim-${s==="서울"?"seoul":"incheon"}">`
+      +geo.filter(g=>g.s===s).map(g=>`<path d="${g.top}"/>`).join("")+`</g>`).join("");
+    // 땅덩이 전체의 옅은 그림자. 지도가 카드 위에 살짝 떠 보인다.
+    // opacity 는 그룹에 — path 마다 주면 겹친 곳만 진해진다.
+    geo.drop=`<g class="drop" opacity=".06" transform="translate(0,${BLOCK_H+4})">`
+      +geo.map(g=>`<path d="${g.top}"/>`).join("")+`</g>`;
+    _landCache={}; _landCache[geoKey]=geo;      // 한 벌만 들고 있으면 충분하다
+  }
+
+  const o=ME||ORIGIN;                     // 기준점 — 뷰 중심과 마커에 함께 쓴다
+  const riverD=linePath(HANGANG,pr,BLOCK_H);
+  const toneOf=key=>{const n=openBy[key]||0;
+    return n?("n"+Math.min(n,4)):(hasPool.has(key)?"has":"bg");};
+
+  // 시·도 경계선.
+  // 별도 외곽선 데이터를 쓰면 구 경계와 1~2km 어긋나 따로 논다. 그래서
+  // 그 시의 구들을 굵은 선으로 한 번 뭉개 칠하고(안쪽 선은 서로 덮여 사라진다)
+  // 그 위에 같은 구들의 윗면을 다시 얹는다. **바깥 테두리만 정확히 남는다.**
+  // 블롭은 캐시본을 쓰고, 시간에 따라 바뀌는 복원 패스만 매번 만든다.
+  // 인천→서울 순: 계양구와 강서구가 맞닿아 있어 순서를 뒤집으면 그 구간 표현이 바뀐다.
+  const rim=geo.blob
+    +["인천","서울"].map(s=>geo.filter(g=>g.s===s)
+      .map(g=>`<path class="blk ${toneOf(g.key)} top" d="${g.top}"/>`).join("")).join("");
+
+  // 블록은 깊이 순서대로, 색만 갈아끼운다.
+  const land=geo.map(g=>
+    g.svg.replace(/class="blk /g,`class="blk ${toneOf(g.key)} `)).join("");
+
+  // 구 이름은 지도에 쓰지 않는다. 올려놓으면 말풍선이 대신 말한다.
+  // 대신 투명한 윗면을 맨 위에 깔아 어느 구에 올렸는지 잡는다.
+  const dhit=geo.map(g=>{
+    const n=openBy[g.key]||0;
+    const st=n?`지금 ${n}곳 열림`:(hasPool.has(g.key)?"지금 열린 곳 없음":"수집된 수영장 없음");
+    return `<path class="dhit" d="${g.top}" data-d="${esc(g.n)}" data-s="${esc(st)}"/>`;
+  }).join("");
+
+  const order={open:5,toolate:4,unknown:3,soon:2,closed:1};
+  const rank=x=>order[x.r.code]||0;
+  const seen=all.filter(x=>hasGeo(x.f)).map(({f,r})=>{
+    const [gx,gy]=pr(f.lat,f.lng);
+    const h=BLOCK_H;                                     // 블록 윗면 위에 선다
+    return {f,r,gx,gy,h,big:r.code==="open"||r.code==="toolate",sel:f.id===S.sel};
+  });
+
+  // 마커는 지면에 못 박고(translate) 그 자리에서 역스케일한다.
+  // 그래야 확대해도 핀 크기가 그대로다 — 지도가 커지지 마커가 커지는 게 아니다.
+  // 안쪽 좌표는 전부 지면점(0,0) 기준. scale 값은 applyView 가 매번 다시 넣는다.
+  const dots=seen.slice().sort((a,b)=>(a.sel?1:0)-(b.sel?1:0)||rank(a)-rank(b))
+    .map(({f,r,gx,gy,h,big,sel})=>{
+      const km=distOf(f), state=r.label||r.code;
+      const rad=sel?6.5:(big?5:3.6);
+      const ax=gx.toFixed(1), ay=(gy-h).toFixed(1);
+      return `<g class="mdot${sel?" on":""}" tabindex="0" role="button"`
+        +` data-id="${f.id}" data-n="${esc(f.name)}" data-c="${esc(f.city)}"`
+        +` data-km="${km==null?"":km.toFixed(1)}" data-st="${esc(state)}"`
+        +` data-dt="${esc(r.detail||"")}" data-code="${r.code}"`
+        +` aria-pressed="${sel}"`
+        +` aria-label="${esc(f.name)} · ${km==null?"거리 미확인":km.toFixed(1)+"km"} · ${esc(state)}">`
+        +`<g class="mp" data-x="${ax}" data-y="${ay}" transform="translate(${ax} ${ay}) scale(1)">`
+        // 손가락 타깃. 점 자체는 작아도 이 투명 원 덕에 누를 수 있다
+        +`<circle class="hit" cx="0" cy="-9" r="9"/>`   // 손가락용 확대는 CSS 에서
+        // 블록 표면에서 핀까지 잇는 대. 이게 없으면 점이 공중에 뜬다
+        +`<line class="stem" x1="0" y1="-9" x2="0" y2="0"/>`
+        +`<ellipse class="shadow" cx="0" cy="0" rx="3.2" ry="${(3.2*TILT).toFixed(1)}"/>`
+        +(sel?`<circle class="ripple" cx="0" cy="-9" r="7"/>`:"")
+        +(big?`<circle class="d-${r.code}" cx="0" cy="-9" r="9" opacity=".15"/>`:"")
+        +`<circle class="pin d-${r.code}" cx="0" cy="-9" r="${rad}"/>`
+        +`</g></g>`;
+    }).join("");
+
+  let meMark="";
+  if(o&&o.lat!=null){
+    const [mx0,my0]=pr(o.lat,o.lng);
+    const mx=mx0, my=my0-BLOCK_H;   // 블록 윗면 위
+    // 이름은 글자로 쓰지 않고 말풍선에 맡긴다 — 지도 위 글자는 하나도 두지 않는다
+    meMark=`<g class="memark" data-d="${ME?"내 위치":esc((ORIGIN&&ORIGIN.name)||"기준점")}"`
+      +` data-s="${ME?"브라우저가 알려준 위치":"거리를 재는 기준점"}">`
+      +`<g class="mp" data-x="${mx.toFixed(1)}" data-y="${my.toFixed(1)}"`
+      +` transform="translate(${mx.toFixed(1)} ${my.toFixed(1)}) scale(1)">`
+      +`<circle class="hit" cx="0" cy="0" r="13"/>`
+      +`<circle class="mepin" cx="0" cy="0" r="13" opacity=".14"/>`
+      +`<circle class="mepin" cx="0" cy="0" r="3.5"/></g></g>`;
+  }
+
+  const hadDot=document.activeElement&&document.activeElement.closest(".mdot");
+  const focusId=hadDot?hadDot.dataset.id:null;
+  wrap.innerHTML=`<svg class="mapsvg" viewBox="0 0 ${MAPW} ${MAPH}" role="group"
+      aria-label="수도권 지도. 위가 북쪽이고, 구 색이 진할수록 지금 입수 가능한 수영장이 많다">
+    ${geo.drop}${land}${rim}
+    <path class="river-case" d="${riverD}"/><path class="river" d="${riverD}"/>
+    ${dhit}${meMark}${dots}
+  </svg>`;
+
+  const box=wrap.closest(".mapbox");
+  const svg=wrap.querySelector(".mapsvg");
+
+  // 기준점(과천, 또는 내 위치)이 한가운데 오도록 첫 화면을 잡는다.
+  // 권역이 넓어지면 전체를 한 화면에 우겨넣는 방식은 못 쓴다 — 내 자리에서 시작해 끌어 본다.
+  // geoKey 에는 투영을 정하는 값이 다 들어 있다. 데이터가 갈려 축척이 바뀌면
+  // 같은 VIEW.x/y 가 전혀 다른 지점을 가리키므로 뷰도 같이 다시 잡아야 한다.
+  const vkey=geoKey+"|"+(ME?"me":"o");
+  if(!VIEW||VIEWKEY!==vkey){
+    VIEWKEY=vkey;
+    // k=1 은 전체가 딱 맞는 배율이라 중앙 정렬을 해봐야 한쪽이 잘릴 뿐이다.
+    // 기준점을 가운데 두는 건 확대했을 때만 뜻이 있다.
+    const c=o&&o.lat!=null?pr(o.lat,o.lng):[MAPW/2,MAPH/2];
+    VIEW={x:c[0]-MAPW/(2*K0), y:c[1]-MAPH/(2*K0), k:K0};
+  }
+  // 버튼을 먼저 되살리고 applyView 가 배율 한계에 맞춰 다시 끈다.
+  // 순서가 뒤집히면 슬라이더만 움직여도 한계 표시가 지워진다.
+  const zin=document.getElementById("zin"), zout=document.getElementById("zout"),
+        zreset=document.getElementById("zreset");
+  zin.disabled=zout.disabled=zreset.disabled=false;
+  applyView(svg);
+
+  // 드래그로 이동. 포인터를 캡처하면 핀 위에서 시작해도 끊기지 않고,
+  // 캡처 중에는 핀의 hover 핸들러가 안 불려서 말풍선이 따라붙지 않는다.
+  // touch-action:none 이라 브라우저 기본 핀치가 막힌다. 직접 받아야
+  // 모바일에서 확대 수단이 버튼 하나뿐이 되지 않는다.
+  const pts=new Map();
+  let pinch=0;
+  const pinchDist=()=>{const [a,b]=[...pts.values()];
+    return Math.hypot(a.x-b.x,a.y-b.y);};
+  const pinchMid=()=>{const [a,b]=[...pts.values()], r=svg.getBoundingClientRect();
+    return [((a.x+b.x)/2-r.left)/r.width,((a.y+b.y)/2-r.top)/r.height];};
+
+  let panning=false, dragged=false, pid=null, px=0, py=0;
+
+  // 함수 선언이라 위에서 참조해도 된다 (onpointermove 가 이걸 먼저 부른다)
+  function endPan(e){
+    pts.delete(e.pointerId);
+    if(pts.size===1){
+      // 핀치에서 한 손가락만 떼면 남은 손가락으로 이동을 이어받는다.
+      // 안 그러면 손을 다 뗐다 다시 짚어야 해서 지도답지 않다.
+      const [id]=[...pts.keys()], p=pts.get(id);
+      pinch=0; panning=true; pid=id; px=p.x; py=p.y;
+      // dragged 가 이미 true 라 아래 캡처 분기를 못 타므로 여기서 직접 건다.
+      // 안 걸면 남은 손가락이 지도 밖으로 나갈 때 pointerup 을 놓쳐 유령 포인터가 남는다.
+      try{svg.setPointerCapture(id);}catch(_){}
+      return;
+    }
+    pinch=pts.size===2?pinchDist():0;
+    panning=false; pid=null; svg.classList.remove("grabbing");
+    try{svg.releasePointerCapture(e.pointerId);}catch(_){}
+  }
+
+  svg.onpointerdown=e=>{
+    if(e.pointerType==="mouse"&&e.button!==0) return;
+    pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size===2){ panning=false; pinch=pinchDist(); hideTip(); return; }
+    if(pts.size>2) return;                     // 세 번째 손가락은 무시
+    panning=true; dragged=false; pid=e.pointerId; px=e.clientX; py=e.clientY;
+    svg.classList.add("grabbing"); hideTip();
+    // 캡처는 아직 걸지 않는다. 여기서 걸면 가만히 누른 클릭까지 svg 로 리타깃돼
+    // 핀의 click 이 영영 안 온다 — 탭으로 시설을 못 고르게 된다.
+  };
+  svg.onpointermove=e=>{
+    // 캡처를 늦게 거는 대가: 3px 안에서 지도 밖(버튼·창 밖)에 버튼을 떼면
+    // pointerup 이 안 온다. 그대로 두면 이후 호버만으로 지도가 끌려다닌다.
+    if(e.pointerType==="mouse"&&panning&&!(e.buttons&1)){ endPan(e); return; }
+    if(pts.has(e.pointerId)) pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size===2){                          // 두 손가락 — 벌린 만큼 확대
+      const d=pinchDist();
+      if(pinch>4&&d>4){ dragged=true; zoomAt(VIEW.k*(d/pinch),...pinchMid()); }
+      pinch=d; return;
+    }
+    if(!panning||e.pointerId!==pid) return;
+    const dx=e.clientX-px, dy=e.clientY-py;
+    if(!dragged){
+      if(Math.abs(dx)<=3&&Math.abs(dy)<=3) return;
+      dragged=true; hideTip();                             // 캡처 직전 깜빡임 방지
+      try{svg.setPointerCapture(e.pointerId);}catch(_){}   // 드래그가 확정된 뒤에만
+    }
+    const u=(MAPW/VIEW.k)/svg.getBoundingClientRect().width;  // CSS 픽셀 → viewBox 단위
+    VIEW.x-=dx*u; VIEW.y-=dy*u; px=e.clientX; py=e.clientY;
+    applyView(svg);
+  };
+  svg.onpointerup=endPan; svg.onpointercancel=endPan;
+
+  // 휠로 확대·축소. 커서가 짚은 지점을 붙잡은 채 배율만 바꾼다.
+  // 핸들러는 지도 영역(#mapview)에 건다 — svg 에만 걸면 우하단 버튼 위에서만
+  // 휠이 안 먹어 어색하다. 초점 계산은 그대로 svg 기준으로 한다.
+  document.getElementById("mapview").onwheel=e=>{
+    // 줄(1)·페이지(2) 단위로도 온다. 33 은 파이어폭스 한 칸(deltaY 3)을
+    // 크롬 한 칸(100)에 맞춘 값 — 16 으로 두면 파이어폭스만 두 배 느리다.
+    const d=e.deltaY*(e.deltaMode===1?33:e.deltaMode===2?400:1);
+    if(!d) return;                                   // 가로 스크롤은 건드리지 않는다
+    // 한계에 닿았는데 더 돌리면 페이지 스크롤에 넘긴다. 늘 가로채면 휠이 갇힌다.
+    // 단 트랙패드 핀치(ctrl+wheel)는 넘길 곳이 페이지 확대뿐이라 항상 가로챈다 —
+    // 지도 끝에 닿았다고 페이지가 통째로 커지면 사고다.
+    if(!e.ctrlKey&&((d>0&&VIEW.k<=ZMIN)||(d<0&&VIEW.k>=ZMAX))) return;
+    e.preventDefault(); hideTip();
+    const r=svg.getBoundingClientRect();
+    zoomAt(VIEW.k*Math.exp(-d*0.0015),
+      (e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height);
+  };
+
+  const ctr=()=>[.5,.5];
+  zin.onclick=()=>zoomAt(VIEW.k*1.6,...ctr());
+  zout.onclick=()=>zoomAt(VIEW.k/1.6,...ctr());
+  zreset.onclick=()=>{VIEWKEY="";render();};
+  // 말풍선 크기는 내용이 바뀔 때만 잰다. pointermove 마다 offsetWidth 를 읽으면
+  // 직전 style 쓰기가 무효화한 레이아웃을 매번 강제로 다시 계산한다.
+  let tipW=0,tipH=0;
+  const measureTip=()=>{tipW=tip.offsetWidth;tipH=tip.offsetHeight;};
+  const placeTip=(cx,cy)=>{
+    // left/top 기준은 .mapbox 의 패딩박스인데 rect 는 보더박스라 1px 어긋난다
+    const b=box.getBoundingClientRect(), L=cx-b.left-1, W=b.width-2;
+    const half=tipW/2+6;
+    let y=cy-b.top-1-12, below=false;
+    if(y-tipH<4){ y=cy-b.top-1+18; below=true; }   // 위가 모자라면 커서 아래로
+    tip.style.left=Math.min(Math.max(L,half),Math.max(half,W-half))+"px";
+    tip.style.top=y+"px";
+    tip.classList.toggle("below",below);
+    tip.classList.add("on");
+    tip.removeAttribute("aria-hidden");
+  };
+  const showTip=(html,cx,cy)=>{tip.innerHTML=html;measureTip();placeTip(cx,cy);};
+  // 다시 그린 뒤 포커스를 되돌릴 때는 말풍선을 띄우지 않는다.
+  // focus() 가 onfocus 를 동기 발화해서, 방금 접은 말풍선이 같은 콜스택에서 되살아난다.
+  let restoring=false;
+  const atCenter=el=>{const r=el.getBoundingClientRect();
+    return [r.left+r.width/2,r.top];};
+
+  wrap.querySelectorAll(".mdot").forEach(g=>{
+    const d=g.dataset;
+    // dataset 은 엔티티를 디코딩해 돌려준다. 속성에 넣을 때 이스케이프한 게
+    // 여기서 원상복구되므로, innerHTML 로 넣기 전에 다시 걸어야 한다.
+    const html=`<b>${esc(d.n)}</b><span class="tmeta">${esc(d.c)}`
+      +(d.km?` · ${esc(d.km)}km`:" · 거리 미확인")+`</span>`
+      +`<span class="tstate s-${esc(d.code)}">${esc(d.st)}</span>`
+      +(d.dt?`<span class="tmeta">${esc(d.dt)}</span>`:"");
+    g.onpointerenter=e=>showTip(html,e.clientX,e.clientY);
+    g.onpointermove=e=>placeTip(e.clientX,e.clientY);    // 움직일 땐 위치만
+    g.onpointerleave=hideTip;
+    g.onfocus=()=>{if(restoring)return;const [cx,cy]=atCenter(g);showTip(html,cx,cy);};
+    g.onblur=hideTip;
+    // 터치에서는 탭하는 순간 말풍선이 사라지지만, 아래 카드가 바로 그 시설로 바뀐다.
+    const pick=()=>{hideTip();S.sel=d.id;render();
+      document.getElementById("detail").scrollIntoView({behavior:"smooth",block:"nearest"});};
+    // 끌고 난 뒤 따라오는 click 만 막는다. pick 안에 가드를 두면
+    // 한 번 드래그한 뒤로는 키보드 Enter 선택까지 영영 삼킨다.
+    g.onclick=()=>{if(dragged)return;pick();};
+    g.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick();}};
+  });
+
+  // 구 블록에 올리면 그 구 이름과 지금 열린 수를 말해준다 — 지도 위 글자를 대신한다
+  wrap.querySelectorAll(".dhit,.memark").forEach(p=>{
+    const html=`<b>${esc(p.dataset.d)}</b><span class="tmeta">${esc(p.dataset.s)}</span>`;
+    p.onpointerenter=e=>showTip(html,e.clientX,e.clientY);
+    p.onpointermove=e=>placeTip(e.clientX,e.clientY);   // 움직일 땐 위치만
+    p.onpointerleave=hideTip;
+  });
+  wrap.onpointerleave=hideTip;
+
+  // 핀을 키보드로 누르면 SVG 가 통째로 교체돼 포커스가 body 로 떨어진다.
+  // picker 는 이미 이렇게 처리해 뒀는데 지도만 빠져 있었다.
+  // 복원 대상은 "선택된 핀"이 아니라 **직전에 포커스였던 핀**이다.
+  if(focusId){
+    const nd=[...wrap.querySelectorAll(".mdot")].find(g=>g.dataset.id===focusId);
+    if(nd){restoring=true;nd.focus({preventScroll:true});restoring=false;}
+  }
+
+  document.getElementById("mapnote").innerHTML=
+    (ME?"":"<b>위치 권한을 주면 내 자리 기준으로 다시 정렬합니다.</b> ")
+    +(noGeo?`좌표를 못 구한 ${noGeo}곳은 표시하지 않았습니다. `:"")
+    +`<b>점이나 구를 짚으면 이름이 나옵니다.</b> `
+    +`경계 © 통계청 2013 · 한강 © OpenStreetMap (ODbL)`;
+}
+
+function emptyHTML(rest){
+  const soon=rest.filter(x=>x.r.code==="soon")[0];
+  return `<div class="empty">
+    <div class="lane"><div class="now" style="left:${pct(S.min)}%"></div></div>
+    <h3>지금 열려 있는 곳이 없습니다</h3>
+    <p>${soon?`가장 빠른 곳은 <b>${soon.f.name}</b> · ${soon.r.label} · ${soon.r.detail}`
+      :"시간을 옮기거나 다른 요일을 확인해 보세요."}</p></div>`;
+}
+
+const dc=document.getElementById("dayChips");
+DOW.forEach((d,i)=>{const b=document.createElement("button");
+  b.className="chip";b.type="button";b.dataset.dow=i+1;b.textContent=d;
+  b.onclick=()=>{S.dow=i+1;render();};dc.appendChild(b);});
+document.querySelectorAll("#resChips .chip").forEach(b=>b.onclick=()=>{S.res=b.dataset.res;render();});
+document.querySelectorAll("#memChips .chip").forEach(b=>b.onclick=()=>{S.mem=b.dataset.mem;render();});
+const sc=document.getElementById("scrub");sc.value=S.min;
+sc.oninput=()=>{S.min=+sc.value;render();};
+document.getElementById("reset").onclick=()=>{const n=new Date();
+  S.min=n.getHours()*60+n.getMinutes();
+  S.dow=((n.getDay()+6)%7)+1;sc.value=S.min;render();};
+
+// 위치는 물어봐야 얻는다. 거부해도 기준점으로 그대로 돌아간다 — 기능이 죽지 않는다.
+document.getElementById("locbtn").onclick=()=>{
+  const btn=document.getElementById("locbtn");
+  if(!navigator.geolocation){
+    document.getElementById("mapnote").textContent="이 브라우저는 위치를 알려주지 않습니다.";return;}
+  btn.textContent="찾는 중…";btn.disabled=true;
+  navigator.geolocation.getCurrentPosition(
+    // 실제로 위치를 얻었을 때만 화면을 다시 맞춘다. 거부·시간초과에도 비워두면
+    // 나중에 슬라이더를 건드리는 순간 애써 맞춘 확대·이동이 초기화된다.
+    p=>{ME={lat:p.coords.latitude,lng:p.coords.longitude}; VIEWKEY="";
+      btn.textContent="다시 찾기";btn.disabled=false;render();},
+    ()=>{btn.textContent="내 위치로";btn.disabled=false;
+      document.getElementById("mapnote").textContent=
+        "위치를 가져오지 못했습니다. 기준점 기준으로 그대로 보여줍니다.";},
+    {timeout:8000,maximumAge:300000});
+};
+
+async function boot(){
+  const sum=document.getElementById("summary");
+  // file:// 로 직접 열면 /api/facilities 가 갈 곳이 없어 빈 껍데기만 뜬다.
+  // 왜 안 되는지 화면이 스스로 말하게 한다 — 침묵한 채 비어 있는 게 최악이다.
+  if(location.protocol==="file:"){
+    sum.innerHTML="파일을 직접 여셨네요 — 이 화면은 서버가 데이터를 줘야 돕니다.<br>"
+      +"터미널에서 <code>python3 serve.py</code> 실행 후 "
+      +"<b>http://localhost:8000</b> 으로 열어주세요.";
+    document.querySelector(".tag").textContent="서버 필요";
+    ["zin","zout","zreset","locbtn"].forEach(id=>{
+      const b=document.getElementById(id); if(b) b.disabled=true;});
+    return;
+  }
+  sum.textContent="데이터 불러오는 중…";
+  try{
+    const r=await fetch("/api/facilities",{cache:"no-store"});
+    if(!r.ok) throw new Error(r.status);
+    const d=await r.json();
+    FACILITIES=d.facilities; ORIGIN=d.origin||null;
+    _landCache={};                 // 데이터가 갈리면 지형 좌표도 갈린다
+    // 지역 이름을 나열하지 않는다. 지역은 고르는 게 아니라 위치에서 따라오는 것이다.
+    document.querySelector(".tag").textContent=
+      `수집 ${FACILITIES.length}곳  |  ${d.generated_at}`;
+    document.getElementById("originNote").innerHTML=
+      `거리는 직선거리이고, 좌표를 못 구한 곳은 <b>거리 미확인</b>입니다. `;
+    render();
+  }catch(e){
+    sum.innerHTML='데이터를 불러오지 못했습니다 — <code>python3 serve.py</code> 로 실행했는지 확인하세요';
+    document.querySelector(".tag").textContent="불러오기 실패";
+    // render 가 안 돌면 지도 버튼 핸들러도 안 붙는다. 눌리기만 하고 반응 없는 상태를 막는다.
+    ["zin","zout","zreset","locbtn"].forEach(id=>{
+      const b=document.getElementById(id); if(b) b.disabled=true;});
+  }
+}
+boot();
+window.addEventListener("focus",()=>{ if(FACILITIES.length) boot(); });
+</script>
+
+<script>
+"use strict";
+/* ══ 프로파일 모듈 ══════════════════════════════════════════════════════════
+   profile.html 에서 옮겨 왔다. IIFE 로 가둬 지도 쪽 전역과 부딪히지 않는다.
+   FACILITIES / ORIGIN / ME / distOf 는 지도 스크립트의 것을 그대로 읽는다 —
+   따로 fetch 하지 않고, 위치 권한도 따로 묻지 않는다 (지도의 "내 위치" 버튼 하나로).
+   등급·유형 규칙은 grade.py 와 같은 값이어야 한다. 한쪽만 고치면 갈라진다. */
+window.ChumProfile=(function(){
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const FREE100_BANDS=[["A",80],["B",100],["C",130],["D",170],["E",null]];
+const CONTINUOUS_CAPS=[[800,"C"],[400,"D"],[100,"E"],[0,null]];
+const GRADES=["A","B","C","D","E"];
+const REACH={verified:[1,1],self:[0,1],derived:[0,1],unknown:[0,0]};
+const reachOf=k=>Object.prototype.hasOwnProperty.call(REACH,k)?REACH[k]:[0,0];
+function band(sec){for(const [g,cut] of FREE100_BANDS) if(cut===null||sec<=cut) return g;return "E";}
+function deriveGrade(p){
+  const sec=p.free100&&typeof p.free100==="object"?p.free100.sec:null;
+  if(typeof sec==="number"&&isFinite(sec)&&sec>0){
+    const src=p.free100.source||"self";
+    return {grade:band(sec),basis:"free100",
+      confidence:(src==="meet"||src==="watch")?"verified":"self"};
+  }
+  const cm=p.continuous_m;
+  if(typeof cm==="number"&&isFinite(cm)){
+    let cap=null;
+    for(const [lo,g] of CONTINUOUS_CAPS) if(cm>=lo){cap=g;break;}
+    if(cap===null) return {grade:"unknown",basis:"continuous",confidence:"unknown"};
+    if(((p.strokes||{}).free)!=="ok") cap=GRADES[Math.min(GRADES.indexOf(cap)+1,GRADES.length-1)];
+    return {grade:cap,basis:"continuous",confidence:"derived"};
+  }
+  return {grade:"unknown",basis:"none",confidence:"unknown"};
+}
+function joinable(p,target){
+  if(GRADES.indexOf(p.grade)<0||GRADES.indexOf(target)<0) return false;
+  const [up,down]=reachOf(p.grade_confidence||"unknown");
+  const d=GRADES.indexOf(target)-GRADES.indexOf(p.grade);
+  return d>=-up&&d<=down;
+}
+const VOLUME_BANDS=[[1200,"V1"],[2500,"V2"],[null,"V3"]];
+const numOr=x=>(typeof x==="number"&&isFinite(x)&&x>0)?x:null;
+function volumeOf(m){
+  if(numOr(m)===null) return null;
+  for(const [cut,v] of VOLUME_BANDS) if(cut===null||m<cut) return v;
+  return "V3";
+}
+function gradeStepOf(p){
+  if(p.grade_confidence!=="verified"||["B","C","D"].indexOf(p.grade)<0) return "";
+  const sec=numOr(p.free100&&typeof p.free100==="object"?p.free100.sec:null);
+  if(sec===null) return "";
+  const b={B:[80,100],C:[100,130],D:[130,170]}[p.grade];
+  return sec<=(b[0]+b[1])/2?"+":"-";
+}
+const W_DIRECT=2,W_INFER=1,RATIO_LONG=2.3,RATIO_SHORT=2.6;
+function axisOf(votes){
+  const t={};
+  for(const [s,w] of votes) if(s) t[s]=(t[s]||0)+w;
+  const ks=Object.keys(t).sort((a,b)=>t[b]-t[a]);
+  if(!ks.length||(ks.length>1&&t[ks[0]]===t[ks[1]])) return {side:null,strength:"반반"};
+  const lose=ks.length>1?t[ks[1]]:0;
+  return {side:ks[0],strength:(lose===0&&t[ks[0]]>=3)?"뚜렷":"약간"};
+}
+function deriveAxes(p){
+  const q=(p.axes_q&&typeof p.axes_q==="object")?p.axes_q:{};
+  const style=Array.isArray(p.style)?p.style:[];
+  const vd=[[{short:"短",long:"長"}[q.distance]||null,W_DIRECT]];
+  const sp=style.indexOf("sprint")>=0,en=style.indexOf("endurance")>=0;
+  if(sp!==en) vd.push([sp?"短":"長",W_INFER]);
+  const f50=numOr(p.free50&&typeof p.free50==="object"?p.free50.sec:null);
+  const f100=numOr(p.free100&&typeof p.free100==="object"?p.free100.sec:null);
+  if(f50&&f100){
+    const r=f100/f50;
+    if(r<RATIO_LONG) vd.push(["長",W_INFER]);
+    else if(r>RATIO_SHORT) vd.push(["短",W_INFER]);
+  }
+  const vp=[[{record:"記",health:"健"}[q.purpose]||null,W_DIRECT],
+            [{more:"記",same:"健"}[p.want]||null,W_INFER]];
+  const vm=[[{plan:"計",flow:"流"}[q.method_plan]||null,W_DIRECT],
+            [{keep:"計",adjust:"流"}[q.method_adapt]||null,W_DIRECT]];
+  const vs=[[{own:"獨",follow:"同"}[q.social]||null,W_DIRECT],
+            [p.role==="pacer"?"同":null,W_INFER]];
+  const axes={distance:axisOf(vd),purpose:axisOf(vp),method:axisOf(vm),social:axisOf(vs)};
+  const trio=[axes.distance.side,axes.purpose.side,axes.method.side];
+  return {axes,type_code:trio.every(Boolean)?trio.join(""):null,
+    social_tag:{"獨":"혼자파","同":"같이파"}[axes.social.side]||null};
+}
+
+const P={ id:null, nickname:null, role:null, gender:null, years:null,
+  strokes:{}, free100:null, im100:null, free50:null, continuous_m:null,
+  session_m:null, want:null, want_m:null, style:[], pools:[],
+  grade:"unknown", grade_basis:"none", grade_confidence:"unknown",
+  grade_step:"", volume:null,
+  axes_q:{}, axes:null, type_code:null, social_tag:null, typed_at:null };
+
+let step=0, STEPS_TOTAL=11, started=false, chat=null, ask=null;
+
+function reveal(id){
+  requestAnimationFrame(()=>{
+    const c=$(id)&&$(id).firstElementChild;
+    if(c) c.scrollIntoView({block:"start",behavior:"smooth"});
+  });
+}
+function keepInView(){
+  requestAnimationFrame(()=>{
+    const r=ask.getBoundingClientRect();
+    if(r.bottom>innerHeight-8) ask.scrollIntoView({block:"end",behavior:"smooth"});
+  });
+}
+function say(text,hint){
+  const d=document.createElement("div");
+  d.className="msg q";
+  d.innerHTML=esc(text)+(hint?`<span class="mhint2">${esc(hint)}</span>`:"");
+  chat.appendChild(d); keepInView();
+}
+function me(text){
+  const d=document.createElement("div");
+  d.className="msg a";
+  d.innerHTML=esc(text);
+  chat.appendChild(d); keepInView();
+}
+function typing(ms,fn){
+  const d=document.createElement("div");
+  d.className="dots"; d.innerHTML="<i></i><i></i><i></i>";
+  chat.appendChild(d); ask.hidden=true; keepInView();
+  setTimeout(()=>{d.remove();fn();},ms);
+}
+function progress(){ $("bar").style.width=Math.min(100,(step-1)/STEPS_TOTAL*100)+"%"; }
+
+function choose(text,hint,opts,onPick){
+  step++; progress();
+  typing(340+Math.random()*260,()=>{
+    say(text,hint);
+    ask.hidden=false;
+    ask.innerHTML=`<div class="opts">`+opts.map((o,i)=>
+      `<button class="opt${o.skip?" skip":""}" data-i="${i}">${esc(o.label)}`
+      +(o.sub?`<small>${esc(o.sub)}</small>`:"")+`</button>`).join("")+`</div>`;
+    ask.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+      const o=opts[+b.dataset.i];
+      me(o.label); ask.hidden=true; onPick(o.v,o);
+    });
+    keepInView();
+  });
+}
+function multi(text,hint,opts,onDone,minPick){
+  step++; progress();
+  const picked=new Set();
+  typing(340,()=>{
+    say(text,hint);
+    ask.hidden=false;
+    ask.innerHTML=`<div class="opts">`+opts.map((o,i)=>
+      `<button class="opt" data-i="${i}">${esc(o.label)}`
+      +(o.sub?`<small>${esc(o.sub)}</small>`:"")+`</button>`).join("")+`</div>`
+      +`<div style="display:flex;margin-top:12px"><button class="go" id="mdone" disabled>다음</button></div>`;
+    const done=$("mdone");
+    const sync=()=>{done.disabled=picked.size<(minPick==null?1:minPick);};
+    ask.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+      const i=+b.dataset.i;
+      if(picked.has(i)){picked.delete(i);b.classList.remove("on");}
+      else{picked.add(i);b.classList.add("on");}
+      sync();
+    });
+    done.onclick=()=>{
+      const vs=[...picked].sort((a,b)=>a-b).map(i=>opts[i]);
+      me(vs.length?vs.map(o=>o.label).join(", "):"없음");
+      ask.hidden=true; onDone(vs.map(o=>o.v),vs);
+    };
+    sync(); keepInView();
+  });
+}
+function askTime(text,hint,onDone,onSkip,skipLabel){
+  step++; progress();
+  typing(340,()=>{
+    say(text,hint);
+    ask.hidden=false;
+    ask.innerHTML=`<div class="timein">
+        <input id="tm" inputmode="numeric" placeholder="분" maxlength="2" aria-label="분">
+        <span>:</span>
+        <input id="ts" inputmode="numeric" placeholder="초" maxlength="3" aria-label="초">
+        <button class="go" id="tgo" disabled>확인</button>
+      </div>
+      <div class="opts" style="margin-top:11px">
+        <button class="opt skip" id="tskip">${esc(skipLabel||"기록을 몰라요")}</button>
+      </div>`;
+    const m=$("tm"), s=$("ts"), go=$("tgo");
+    const val=()=>{
+      let mi=parseInt(m.value||"0",10), se=parseInt(s.value||"0",10);
+      if(isNaN(se)||se<0||isNaN(mi)||mi<0||mi>59) return null;
+      if(se>59){ mi+=Math.floor(se/60); se%=60; if(mi>59) return null; }
+      const t=mi*60+se;
+      return t>0?t:null;
+    };
+    const sync=()=>{go.disabled=val()===null;};
+    [m,s].forEach(el=>{
+      el.oninput=()=>{
+        el.value=el.value.replace(/\D/g,"");
+        if(el===m&&el.value.length===2) s.focus();
+        sync();
+      };
+      el.onkeydown=e=>{if(e.key==="Enter"&&!go.disabled) go.click();};
+    });
+    go.onclick=()=>{
+      const t=val(); if(t===null) return;
+      me(`${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}`);
+      ask.hidden=true; onDone(t);
+    };
+    $("tskip").onclick=()=>{me(skipLabel||"기록을 몰라요");ask.hidden=true;onSkip();};
+    m.focus(); keepInView();
+  });
+}
+
+function q1role(){
+  choose("먼저, 어느 쪽에 가까우세요?", null, [
+    {v:"member", label:"같이 돌 사람을 찾고 있어요"},
+    {v:"pacer",  label:"앞에서 끌어주고 싶어요", sub:"페이서로 등록할 수 있어요"},
+    {v:"both",   label:"아직 잘 모르겠어요"},
+  ], v=>{P.role=v; q2years();});
+}
+function q2years(){
+  choose("수영 배운 지는 얼마나 되셨어요?", null, [
+    {v:6, label:"6개월 미만"},{v:18, label:"1년 안팎"},
+    {v:36, label:"2~3년"},{v:72, label:"3년 이상"},
+  ], v=>{P.years=v; q3strokes();});
+}
+function q3strokes(){
+  multi("지금 되는 영법을 골라주세요.", "50m 정도 무리 없이 갈 수 있으면 '된다'로 봅니다.", [
+    {v:"free",label:"자유형"},{v:"back",label:"배영"},
+    {v:"breast",label:"평영"},{v:"fly",label:"접영"},
+  ], vs=>{
+    ["free","back","breast","fly"].forEach(k=>{P.strokes[k]=vs.indexOf(k)>=0?"ok":"none";});
+    q4free100();
+  }, 0);
+}
+function q4free100(){
+  if(P.strokes.free!=="ok"){ STEPS_TOTAL--; return q5continuous(); }
+  askTime("100m 자유형 기록, 아세요?",
+    "분:초로 넣어주세요. 대회 기록이 아니어도, 대략이어도 괜찮습니다.",
+    t=>{P.free100={sec:t,source:"self"}; q4b();},
+    ()=>{ q5continuous(); }, "재본 적 없어요");
+}
+function q4b(){
+  choose("그 기록은 어디서 나온 건가요?",
+    "대회나 워치 기록이면 매칭에서 위 등급까지 열립니다.", [
+    {v:"meet",  label:"대회·측정회 공식 기록"},
+    {v:"watch", label:"워치로 잰 기록"},
+    {v:"self",  label:"대충 기억하는 정도예요", sub:"이 경우 위 등급 세션은 잠깁니다"},
+  ], v=>{P.free100.source=v; q5imOrSprint();});
+}
+function q5continuous(){
+  choose("그럼 쉬지 않고 몇 m 정도 가세요?",
+    "이게 기록보다 오히려 정확할 때가 많습니다.", [
+    {v:50, label:"50m 정도"},{v:100, label:"100~200m"},
+    {v:400, label:"400m 안팎"},{v:800, label:"800m 이상", sub:"쉬지 않고"},
+  ], v=>{P.continuous_m=v; q5imOrSprint();});
+}
+function q5imOrSprint(){
+  const all=["free","back","breast","fly"].every(k=>P.strokes[k]==="ok");
+  if(!all) return q6free50();
+  STEPS_TOTAL++;
+  askTime("네 영법이 다 되시네요. 개인혼영 100m 기록도 아세요?",
+    "IM 세션을 매칭할 때만 씁니다. 등급에는 안 들어갑니다.",
+    t=>{P.im100={sec:t,source:"self"}; q6free50();},
+    ()=>q6free50(), "몰라요");
+}
+function q6free50(){
+  if(P.strokes.free!=="ok"){ STEPS_TOTAL--; return q7session(); }
+  askTime("50m 자유형 최고기록은요?",
+    "참고용입니다 — 스프린트 지표라 등급에는 쓰지 않습니다.",
+    t=>{P.free50={sec:t,source:"self"}; q7session();},
+    ()=>q7session(), "몰라요");
+}
+function q7session(){
+  choose("한 번 가면 보통 몇 m 정도 도세요?", null, [
+    {v:800, label:"800m 안팎"},{v:1500, label:"1,500m 안팎"},
+    {v:2000, label:"2,000m 안팎"},{v:3000, label:"3,000m 이상"},
+  ], v=>{P.session_m=v; q8want();});
+}
+function q8want(){
+  choose("같이 돌면 어느 정도가 좋으세요?", null, [
+    {v:"same", label:"지금이랑 비슷하게"},
+    {v:"more", label:"조금 더 많이", sub:"밀어붙여 주면 좋겠어요"},
+    {v:"less", label:"조금 적게", sub:"대신 제대로"},
+  ], v=>{
+    P.want=v;
+    P.want_m = v==="same"?P.session_m : v==="more"?Math.round(P.session_m*1.4) : Math.round(P.session_m*0.7);
+    q9style();
+  });
+}
+function q9style(){
+  multi("어떤 훈련을 원하세요?", "복수 선택할 수 있어요.", [
+    {v:"endurance", label:"지구력", sub:"길게 꾸준히"},
+    {v:"sprint",    label:"스프린트", sub:"짧고 빠르게"},
+    {v:"drill",     label:"기술·드릴", sub:"자세 교정"},
+    {v:"im",        label:"개인혼영"},
+    {v:"open",      label:"오픈워터"},
+  ], vs=>{P.style=vs; q10pools();});
+}
+function q10pools(){
+  step++; progress();
+  typing(340,()=>{
+    const sorted=FACILITIES.slice().sort((a,b)=>(distOf(a)??1e9)-(distOf(b)??1e9));
+    say("주로 어느 수영장에 가세요?",
+      sorted.length?"가까운 순입니다. 여러 곳 고를 수 있어요."
+                   :"수영장 목록을 불러오지 못했습니다. 건너뛰셔도 됩니다.");
+    ask.hidden=false;
+    const picked=new Set();
+    const row=f=>{const km=distOf(f);
+      return `<button class="pool" data-id="${esc(f.id)}">
+        <span class="box"></span><b>${esc(f.name)}</b>
+        <span class="km">${km!=null?km.toFixed(1)+"km":esc(f.city||"")}</span></button>`;};
+    ask.innerHTML=(sorted.length>8?`<input class="search" id="psearch" placeholder="수영장 이름으로 찾기" aria-label="수영장 검색">`:"")
+      +`<div class="poolwrap" id="plist">${sorted.map(row).join("")}</div>`
+      +`<div style="display:flex;margin-top:12px"><button class="go" id="pdone">${sorted.length?"다음":"건너뛰기"}</button></div>`;
+    const bind=()=>ask.querySelectorAll(".pool").forEach(b=>{
+      if(picked.has(b.dataset.id)) b.classList.add("on");
+      b.onclick=()=>{
+        const id=b.dataset.id;
+        if(picked.has(id)){picked.delete(id);b.classList.remove("on");}
+        else{picked.add(id);b.classList.add("on");}
+      };
+    });
+    bind();
+    const se=$("psearch");
+    if(se) se.oninput=()=>{
+      const k=se.value.trim().toLowerCase();
+      const hit=sorted.filter(f=>!k||f.name.toLowerCase().includes(k)||(f.city||"").toLowerCase().includes(k));
+      $("plist").innerHTML=hit.map(row).join("")||`<p class="hint" style="margin:6px 2px">그런 이름은 없네요.</p>`;
+      bind();
+    };
+    $("pdone").onclick=()=>{
+      P.pools=[...picked];
+      const names=P.pools.map(id=>(FACILITIES.find(f=>f.id===id)||{}).name).filter(Boolean);
+      me(names.length?names.join(", "):"아직 정하지 않았어요");
+      ask.hidden=true; q11gender();
+    };
+    keepInView();
+  });
+}
+function q11gender(){
+  choose("마지막으로, 성별을 알려주실래요?",
+    "동성끼리 매칭하고 싶을 때만 씁니다. 건너뛰어도 괜찮습니다.", [
+    {v:"female", label:"여성"},{v:"male", label:"남성"},
+    {v:null, label:"말하지 않을래요", skip:true},
+  ], v=>{P.gender=v; finish();});
+}
+
+const CONF_TXT={verified:"검증됨",self:"자기신고",derived:"추정",unknown:"미확인"};
+const STROKE_TXT={free:"자유형",back:"배영",breast:"평영",fly:"접영"};
+const STYLE_TXT={endurance:"지구력",sprint:"스프린트",drill:"기술·드릴",im:"개인혼영",open:"오픈워터"};
+const ROLE_TXT={member:"같이 돌 사람 찾는 중",pacer:"앞사람 지망",both:"아직 미정"};
+const mmss=s=>s==null?null:`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+
+function finish(){
+  step=STEPS_TOTAL+1; progress();
+  const g=deriveGrade(P);
+  P.grade=g.grade; P.grade_basis=g.basis; P.grade_confidence=g.confidence;
+  P.grade_step=gradeStepOf(P);
+  P.volume=volumeOf(P.session_m);
+  P.id=P.id||("p_"+Date.now().toString(36));
+  P.updated_at=new Date().toISOString().slice(0,10);
+  typing(520,()=>{
+    say(P.grade==="unknown"
+      ? "다 됐어요. 다만 등급을 매길 근거가 아직 없네요."
+      : "다 됐어요. 이렇게 정리했습니다.");
+    render(g);
+    save();
+  });
+}
+
+function render(g){
+  const known=P.grade!=="unknown";
+  const reach=known?GRADES.filter(t=>joinable(P,t)):[];
+  const strokes=Object.keys(STROKE_TXT).filter(k=>P.strokes[k]==="ok").map(k=>STROKE_TXT[k]);
+  const poolNames=P.pools.map(id=>(FACILITIES.find(f=>f.id===id)||{}).name).filter(Boolean);
+  const row=(k,v)=>`<dt>${esc(k)}</dt><dd class="${v?"":"none"}">${v?esc(v):"미확인"}</dd>`;
+  let why;
+  if(g.basis==="free100")
+    why=`<b>${mmss(P.free100.sec)}</b> 라는 100m 자유형 기록을 근거로 잡았습니다.`;
+  else if(g.basis==="continuous"&&known)
+    why=`기록 대신 <b>쉬지 않고 ${P.continuous_m}m</b> 를 근거로 잡았습니다. 실제로는 더 빠를 수 있어요.`;
+  else if(g.basis==="continuous")
+    why=`아직 등급을 매기지 않았습니다. 조금 더 늘려서 다시 오시면 돼요.`;
+  else
+    why=`기록도 지속 거리도 없어서 등급을 매기지 않았습니다. <b>비워 두는 게 틀리게 채우는 것보다 낫습니다.</b>`;
+  let note;
+  if(!known)
+    note=g.basis==="continuous"
+      ? `등급이 없으면 <b>세션 매칭이 아직 열리지 않습니다.</b> 쉬지 않고 100m 를 갈 수 있게 되면 열립니다.`
+      : `등급이 없으면 <b>세션 매칭이 아직 열리지 않습니다.</b> 100m 자유형을 한 번 재보시면 바로 열립니다.`;
+  else if(g.confidence==="verified")
+    note=`검증된 기록이라 <b>한 등급 위까지</b> 열려 있습니다.`;
+  else
+    note=`자기신고라 <b>위 등급 세션은 잠겨 있습니다.</b> 대회나 워치 기록을 넣으면 열립니다 — 이건 스스로 만들 수 없어야 안전하니까요.`;
+
+  $("out").innerHTML=`<div class="result">
+    <div class="gradebig">
+      <div class="gletter${known?"":" unk"}">${known?esc(P.grade+P.grade_step):"미확인"}</div>
+      <div class="gwhy">${why}
+        <span class="conf ${esc(g.confidence)}">${esc(CONF_TXT[g.confidence])}</span></div>
+    </div>
+    <dl class="facts">
+      ${row("역할",ROLE_TXT[P.role])}
+      ${row("영법",strokes.join(" · "))}
+      ${row("100 자유형",mmss(P.free100&&P.free100.sec))}
+      ${row("100 개인혼영",mmss(P.im100&&P.im100.sec))}
+      ${row("50 자유형",mmss(P.free50&&P.free50.sec))}
+      ${row("한 세션",P.session_m?P.session_m.toLocaleString()+"m":null)}
+      ${row("볼륨",P.volume)}
+      ${row("원하는 양",P.want_m?P.want_m.toLocaleString()+"m":null)}
+      ${row("훈련 성향",P.style.map(s=>STYLE_TXT[s]).join(" · "))}
+      ${row("수영장",poolNames.join(" · "))}
+      ${row("참여 가능",reach.length?reach.join(" · ")+" 등급 세션":null)}
+    </dl>
+    <p class="note">${note}</p>
+    <div class="acts">
+      <button class="pri" id="totype">3분 더 — 내 수영 유형 보기</button>
+      <button id="again">다시 하기</button>
+      <button id="showjson">JSON 보기</button>
+      <button id="copy">복사</button>
+    </div>
+    <pre class="json" id="json">${esc(JSON.stringify(P,null,1))}</pre>
+  </div>`;
+  $("totype").onclick=e=>{e.target.disabled=true;startTypePhase();};
+  $("again").onclick=()=>location.reload();
+  $("showjson").onclick=()=>$("json").classList.toggle("on");
+  $("copy").onclick=async e=>{
+    try{ await navigator.clipboard.writeText(JSON.stringify(P,null,1));
+      e.target.textContent="복사됨"; setTimeout(()=>e.target.textContent="복사",1400);
+    }catch(_){ $("json").classList.add("on"); e.target.textContent="직접 복사해 주세요"; }
+  };
+  reveal("out");
+}
+
+function startTypePhase(){
+  step=STEPS_TOTAL;
+  STEPS_TOTAL+=5;
+  typing(400,()=>{
+    say("좋아요. 이제 잘하고 못하고가 아니라, 어떤 식으로 수영하는지를 물어볼게요.",
+      "정답이 없는 질문들입니다.");
+    t1dist();
+  });
+}
+function t1dist(){
+  choose("오늘 컨디션이 딱 좋습니다. 뭘 하고 싶으세요?", null, [
+    {v:"short", label:"50m를 있는 힘껏 몇 번", sub:"짧고 세게"},
+    {v:"long",  label:"400m를 한 번에 기분 좋게", sub:"길고 꾸준히"},
+    {v:"both",  label:"둘 다 좋은데요"},
+  ], v=>{P.axes_q.distance=v; t2purpose();});
+}
+function t2purpose(){
+  choose("석 달 뒤에 뭐가 달라져 있으면 좋겠어요?", null, [
+    {v:"record", label:"100m가 5초 빨라져 있으면"},
+    {v:"health", label:"주 3회를 안 빠지고 다니고 있으면"},
+    {v:"both",   label:"둘 다요"},
+  ], v=>{P.axes_q.purpose=v; t3plan();});
+}
+function t3plan(){
+  choose("수영장 가기 전에, 오늘 뭘 할지 정해두는 편이세요?", null, [
+    {v:"plan", label:"대충이라도 정해간다"},
+    {v:"flow", label:"물에 들어가서 정한다"},
+    {v:"both", label:"그때그때"},
+  ], v=>{P.axes_q.method_plan=v; t4adapt();});
+}
+function t4adapt(){
+  choose("짜 온 세트가 오늘 몸에 좀 버겁습니다.", null, [
+    {v:"keep",   label:"그래도 끝까지 맞춘다"},
+    {v:"adjust", label:"중간에 줄이거나 바꾼다"},
+  ], v=>{P.axes_q.method_adapt=v; t5social();});
+}
+function t5social(){
+  choose("옆 레인에 나보다 조금 빠른 사람이 있습니다.", null, [
+    {v:"own",     label:"신경 안 쓰고 내 페이스대로"},
+    {v:"follow",  label:"따라가 본다. 그게 재밌다"},
+    {v:"depends", label:"그날 다르다"},
+  ], v=>{P.axes_q.social=v; finishType();});
+}
+
+const AXIS_NAME={distance:"거리",purpose:"목적",method:"방식",social:"거리감"};
+const SIDE_TXT={"短":"짧고 세게","長":"길고 꾸준히","記":"기록","健":"컨디션",
+  "計":"계획","流":"즉흥","獨":"혼자","同":"같이"};
+
+function finishType(){
+  step=STEPS_TOTAL+1; progress();
+  const t=deriveAxes(P);
+  P.axes=t.axes; P.type_code=t.type_code; P.social_tag=t.social_tag;
+  P.typed_at=new Date().toISOString().slice(0,10);
+  save();
+  typing(520,()=>{
+    say(P.type_code?"나왔어요.":"거의 나왔어요 — 아직 안 갈린 축이 있네요.");
+    renderType();
+  });
+}
+function renderType(){
+  const rows=Object.keys(AXIS_NAME).map(k=>{
+    const a=P.axes[k];
+    return `<dt>${esc(AXIS_NAME[k])}</dt><dd class="${a.side?"":"none"}">${
+      a.side
+        ? `${esc(a.side)} ${esc(SIDE_TXT[a.side])} <small style="color:var(--ink-3);font-weight:400">(${esc(a.strength)})</small>`
+        : "아직 안 갈림"}</dd>`;
+  }).join("");
+  const undecided=Object.keys(AXIS_NAME).filter(k=>!P.axes[k].side);
+  const note=P.type_code
+    ? (undecided.length
+        ? `거리감 축은 아직 안 갈렸어요. 몇 번 돌아보시면 갈립니다 — 갈릴 때까지 그 축은 매칭에서 빼고 계산합니다.`
+        : `유형은 3개월 뒤에 다시 물어볼게요. 사람은 바뀌고, 특히 수영을 시작한 지 얼마 안 됐으면 빨리 바뀝니다.`)
+    : `${undecided.map(k=>AXIS_NAME[k]).join("·")} 축이 아직 안 갈렸습니다. 코드는 거리·목적·방식이 다 갈리면 붙어요 — 반반을 한쪽으로 반올림하지는 않습니다.`;
+  $("out2").innerHTML=`<div class="result">
+    <div class="gradebig">
+      <div class="gletter${P.type_code?"":" unk"}" style="font-size:${P.type_code?"30px":"15px"}">${
+        P.type_code?esc(P.type_code):"미확정"}</div>
+      <div class="gwhy">${
+        P.type_code
+          ? `<b>${esc(P.type_code)}</b>${P.social_tag?` · <b>${esc(P.social_tag)}</b>`:""} — 잘하고 못하고가 아니라 방향입니다. 매칭에서 등급을 올려주지도, 내려주지도 않아요.`
+          : `이름은 아직 없어요. 유형 이름은 쓰는 분들 반응을 보고 붙일 예정입니다.`}
+      </div>
+    </div>
+    <dl class="facts">${rows}</dl>
+    <p class="note">${note}</p>
+    <div class="acts"><button class="pri" id="gomatch">이 프로파일로 첨벙 모으기 →</button></div>
+  </div>`;
+  $("gomatch").onclick=()=>{location.hash="#match";};
+  const j=$("json");
+  if(j) j.textContent=JSON.stringify(P,null,1);
+  reveal("out2");
+}
+
+function save(){
+  try{ localStorage.setItem("cbd.profile",JSON.stringify(P)); }catch(_){}
+  if(typeof renderMeStrip==="function") renderMeStrip();
+}
+
+function init(){
+  if(started) return;
+  started=true;
+  chat=$("chat"); ask=$("ask");
+  q1role();
+}
+return {init};
+})();
+
+/* ══ 첨벙 모으기 모듈 ═══════════════════════════════════════════════════════
+   match.html 에서 옮겨 왔다. 모집 글 생성기 — 매칭 목록을 그리려면 가짜 사람을
+   채워야 하므로(원칙 1 위반) 만들지 않는다. 참여 등급 줄은 grade.py 의 REACH 를
+   세션 쪽에서 뒤집은 것. 한쪽만 고치면 갈라진다. */
+window.ChumMatch=(function(){
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const GRADES=["A","B","C","D","E"];
+function acceptRange(t,kind){
+  const i=GRADES.indexOf(t);
+  if(i<0) return null;
+  const lo=Math.max(0,i-1);
+  const hi=kind==="verified"?Math.min(GRADES.length-1,i+1):i;
+  return lo===hi?GRADES[lo]:GRADES[lo]+"~"+GRADES[hi];
+}
+const MDOW=["월","화","수","목","금","토","일"];
+const S={pool:null,dayOff:0,sess:null,manual:null,mode:"peer",n:2};
+let P=null,bound=false;
+
+function loadP(){
+  P=null;
+  try{ P=JSON.parse(localStorage.getItem("cbd.profile")); }catch(_){}
+  if(P&&typeof P!=="object") P=null;
+}
+function dayInfo(off){
+  const d=new Date(); d.setDate(d.getDate()+off);
+  return {d,dow:((d.getDay()+6)%7)+1,label:(off===0?"오늘 ":off===1?"내일 ":"")
+    +(d.getMonth()+1)+"/"+d.getDate()+"("+MDOW[((d.getDay()+6)%7)]+")"};
+}
+function sortedPools(){
+  return FACILITIES.slice().sort((a,b)=>(distOf(a)??1e9)-(distOf(b)??1e9));
+}
+
+function render(){
+  const app=$("mtapp");
+  if(!P||GRADES.indexOf(P.grade)<0){
+    app.innerHTML=`<div class="mcard">
+      <h2>시작하기 전에</h2>
+      <p style="margin:0;font-size:14.5px;line-height:1.65">
+        모집 글에는 <b>내 수준</b>이 들어갑니다. 수준 없이 모으면 페이스가 안 맞는 사람이
+        오게 되고, 그건 레인에서 서로에게 미안한 일이 됩니다.<br>
+        ${P?"등급이 아직 미확인이에요. 100m 자유형을 한 번 재보시면 열립니다.":"프로파일이 아직 없어요. 3분이면 됩니다."}</p>
+      <a class="cta" href="#profile">${P?"프로파일 이어하기 →":"내 프로파일 만들기 →"}</a>
+    </div>`;
+    return;
+  }
+  const me=[`<span class="mtag g">${esc(P.grade+(P.grade_step||""))}</span>`];
+  if(P.volume) me.push(`<span class="mtag">${esc(P.volume)}</span>`);
+  if(P.type_code) me.push(`<span class="mtag">${esc(P.type_code)}</span>`);
+  if(P.social_tag) me.push(`<span class="mtag">${esc(P.social_tag)}</span>`);
+  const pools=sortedPools();
+  const days=[0,1,2].map(off=>{
+    const di=dayInfo(off);
+    return `<button class="mchip${S.dayOff===off?" on":""}" data-off="${off}">${esc(di.label)}</button>`;
+  }).join("");
+  app.innerHTML=`
+  <div class="mcard"><h2>내 수준 — 모집 글에 이대로 들어갑니다</h2>
+    <div class="mtags">${me.join("")}
+      <a href="#profile" style="font-size:12.5px;color:var(--water);margin-left:auto">수정 →</a></div>
+  </div>
+  <div class="mcard"><h2>1 · 어디서</h2>
+    ${pools.length>8?`<input class="search" id="mtsearch" placeholder="수영장 이름으로 찾기" aria-label="수영장 검색">`:""}
+    <div class="poolwrap" id="mtlist"></div>
+    ${pools.length?"":`<p class="alert">수영장 목록을 불러오지 못했습니다. 지도 탭이 데이터를 받아오면 다시 열어주세요.</p>`}
+  </div>
+  <div class="mcard"><h2>2 · 언제</h2>
+    <div class="mchips" id="mtdays">${days}</div>
+    <div id="slots" style="margin-top:11px"></div>
+  </div>
+  <div class="mcard"><h2>3 · 어떻게</h2>
+    <div class="mchips" id="modechips">
+      <button class="mchip${S.mode==="peer"?" on":""}" data-mode="peer">같이 돌기<small>서로 페이스 맞춰서</small></button>
+      <button class="mchip${S.mode==="lead"?" on":""}" data-mode="lead">끌어줄게요<small>내가 앞에서 리드</small></button>
+    </div>
+    <div class="mchips" id="nchips" style="margin-top:9px">
+      ${[1,2,3,4].map(n=>`<button class="mchip${S.n===n?" on":""}" data-n="${n}">${n}명<small>나까지 ${n+1}명</small></button>`).join("")}
+    </div>
+    <p class="hint">레인 매너상 한 레인에 5명을 넘기지 않습니다.</p>
+  </div>
+  <div class="mcard"><h2>모집 글</h2>
+    <div class="preview" id="preview"></div>
+    <div class="acts">
+      <button class="pri" id="mtcopy">복사해서 붙여넣기</button>
+      <button id="mtkeep">임시 저장</button>
+    </div>
+    <p class="note"><b>세트 중엔 벽에서 이야기하지 않는다</b> — 모집 글에 미리 적어 두면
+      물속에서 어색해지지 않습니다. 훈련표는 전날 밤에 공유하세요.</p>
+  </div>
+  <div class="mcard" id="draftbox" hidden><h2>임시 저장</h2><div id="drafts"></div></div>`;
+  bindPools(pools); bindDays(); bindMode(); renderSlots(); renderPreview(); renderDrafts();
+}
+
+function poolRow(f){
+  const km=distOf(f);
+  return `<button class="pool${S.pool===f.id?" on":""}" data-id="${esc(f.id)}">
+    <b>${esc(f.name)}</b>
+    <span class="km">${km!=null?km.toFixed(1)+"km":esc(f.city||"")}</span></button>`;
+}
+function bindPools(pools){
+  const list=$("mtlist");
+  const draw=k=>{
+    const hit=pools.filter(f=>!k||f.name.toLowerCase().includes(k)||(f.city||"").toLowerCase().includes(k));
+    list.innerHTML=hit.map(poolRow).join("")||`<p class="hint">그런 이름은 없네요.</p>`;
+    list.querySelectorAll(".pool").forEach(b=>b.onclick=()=>{
+      S.pool=b.dataset.id; S.sess=null; S.manual=null; render();
+    });
+  };
+  draw("");
+  const se=$("mtsearch");
+  if(se) se.oninput=()=>draw(se.value.trim().toLowerCase());
+}
+function bindDays(){
+  $("mtdays").querySelectorAll(".mchip").forEach(b=>b.onclick=()=>{
+    S.dayOff=+b.dataset.off; S.sess=null; S.manual=null; render();
+  });
+}
+function bindMode(){
+  $("modechips").querySelectorAll(".mchip").forEach(b=>b.onclick=()=>{S.mode=b.dataset.mode;render();});
+  $("nchips").querySelectorAll(".mchip").forEach(b=>b.onclick=()=>{S.n=+b.dataset.n;render();});
+}
+function renderSlots(){
+  const box=$("slots");
+  const f=FACILITIES.find(x=>x.id===S.pool);
+  if(!f){ box.innerHTML=`<p class="hint">먼저 수영장을 골라주세요.</p>`; return; }
+  const di=dayInfo(S.dayOff);
+  const open=(f.sessions||[]).filter(s=>s.type==="open"&&(s.days||[]).indexOf(di.dow)>=0);
+  const unknown=(f.unknownDays||[]).indexOf(di.dow)>=0;
+  let html="";
+  if(open.length){
+    html=`<div class="mchips">`+open.map((s,i)=>
+      `<button class="mchip${S.sess===i?" on":""}" data-i="${i}">${esc(s.start)}–${esc(s.end)}`
+      +`<small>${esc(s.part||"자유수영")}${s.provisional?" · 잠정":""}${
+        s.ticketTypes?" · 이용권 제한":""}${s.lanesNote?" · 일부 레인":""}</small></button>`).join("")+`</div>`;
+  }else{
+    html=`<p class="${unknown?"alert":"hint"}">${
+      unknown?"이 요일 시간표는 미확인입니다. 시설에 확인한 뒤 직접 적어주세요."
+             :"이 요일에 확인된 자유수영이 없습니다. 다른 요일을 보거나 직접 적어주세요."}</p>`;
+  }
+  html+=`<div class="manual">
+    <input id="mh" inputmode="numeric" maxlength="2" placeholder="시" aria-label="시"
+      value="${S.manual?esc(S.manual.split(":")[0]):""}"><span>:</span>
+    <input id="mm" inputmode="numeric" maxlength="2" placeholder="분" aria-label="분"
+      value="${S.manual?esc(S.manual.split(":")[1]):""}">
+    <span>직접 입력 (시간표에 없는 시간)</span></div>`;
+  box.innerHTML=html;
+  box.querySelectorAll(".mchip").forEach(b=>b.onclick=()=>{
+    S.sess=+b.dataset.i; S.manual=null; render();
+  });
+  const mh=$("mh"),mm=$("mm");
+  const man=()=>{
+    const h=parseInt(mh.value,10), m=parseInt(mm.value||"0",10);
+    if(isNaN(h)||h<0||h>23||isNaN(m)||m<0||m>59){S.manual=null;}
+    else{S.manual=String(h).padStart(2,"0")+":"+String(m).padStart(2,"0");S.sess=null;}
+    renderPreview();
+    if(S.manual!==null) $("slots").querySelectorAll(".mchip.on").forEach(c=>c.classList.remove("on"));
+  };
+  [mh,mm].forEach(el=>el.oninput=()=>{el.value=el.value.replace(/\D/g,"");man();});
+}
+function buildText(){
+  const f=FACILITIES.find(x=>x.id===S.pool);
+  if(!f||!P) return null;
+  const di=dayInfo(S.dayOff);
+  const s=S.sess!=null?((f.sessions||[]).filter(x=>x.type==="open"&&(x.days||[]).indexOf(di.dow)>=0)[S.sess]):null;
+  const when=s?`${s.start}–${s.end}`:(S.manual?S.manual+" (시간표 미확인 — 직접 확인함)":null);
+  if(!when) return null;
+  const lv=[P.grade+(P.grade_step||""),P.volume,P.type_code,P.social_tag].filter(Boolean).join(" · ");
+  return [
+    `[첨벙단] ${di.label} ${when} · ${f.name}`,
+    (S.mode==="lead"?`앞에서 끌어줄게요 — 같이 돌 사람 ${S.n}명 구합니다 (나까지 ${S.n+1}명)`
+                    :`같이 돌 사람 ${S.n}명 구합니다 (나까지 ${S.n+1}명)`),
+    `내 수준: ${lv}`,
+    `참여 등급: ${acceptRange(P.grade,"verified")} (대회·워치 기록) / ${acceptRange(P.grade,"self")} (자기신고)`,
+    ``,
+    `세트는 전날 밤에 공유합니다. 세트 중엔 벽에서 이야기하지 않기로 해요 —`,
+    `안전요원과 다른 이용객에게 폐가 되지 않는 게 우선입니다.`,
+  ].join("\n");
+}
+function renderPreview(){
+  const t=buildText();
+  $("preview").textContent=t||"수영장과 시간을 고르면 여기 모집 글이 나타납니다.";
+  $("mtcopy").disabled=$("mtkeep").disabled=!t;
+}
+function renderDrafts(){
+  let ds=[];
+  try{ ds=JSON.parse(localStorage.getItem("cbd.drafts"))||[]; }catch(_){}
+  if(!Array.isArray(ds)||!ds.length){ $("draftbox").hidden=true; return; }
+  $("draftbox").hidden=false;
+  $("drafts").innerHTML=ds.map((d,i)=>
+    `<div class="draft"><b>${esc(d.head)}</b><span class="dm">${esc(d.saved)}</span>
+     <button data-i="${i}" data-act="copy">복사</button>
+     <button data-i="${i}" data-act="del">지우기</button></div>`).join("");
+  $("drafts").querySelectorAll("button").forEach(b=>b.onclick=async()=>{
+    const i=+b.dataset.i;
+    if(b.dataset.act==="del"){ ds.splice(i,1);
+      try{localStorage.setItem("cbd.drafts",JSON.stringify(ds));}catch(_){}
+      renderDrafts(); return; }
+    try{ await navigator.clipboard.writeText(ds[i].text); b.textContent="복사됨";
+      setTimeout(()=>b.textContent="복사",1300); }catch(_){}
+  });
+}
+function bindActs(){
+  if(bound) return; bound=true;
+  document.addEventListener("click",async e=>{
+    if(e.target.id==="mtcopy"){
+      const t=buildText(); if(!t) return;
+      try{ await navigator.clipboard.writeText(t);
+        e.target.textContent="복사됨 — 단톡방에 붙여넣으세요";
+        setTimeout(()=>e.target.textContent="복사해서 붙여넣기",1800);
+      }catch(_){ e.target.textContent="선택해서 직접 복사해 주세요"; }
+    }
+    if(e.target.id==="mtkeep"){
+      const t=buildText(); if(!t) return;
+      let ds=[];
+      try{ ds=JSON.parse(localStorage.getItem("cbd.drafts"))||[]; }catch(_){}
+      if(!Array.isArray(ds)) ds=[];
+      ds.unshift({head:t.split("\n")[0].replace(/^\[첨벙단\] /,""),text:t,
+        saved:new Date().toISOString().slice(5,16).replace("T"," ")});
+      ds=ds.slice(0,8);
+      try{ localStorage.setItem("cbd.drafts",JSON.stringify(ds)); }catch(_){}
+      renderDrafts();
+    }
+  });
+}
+function open(){ loadP(); bindActs(); render(); }
+return {open};
+})();
+
+/* ══ 내 카드 모듈 ═══════════════════════════════════════════════════════════
+   프로파일을 그림 한 장으로. 규칙 하나 — **아는 것만 그린다.**
+   답 안 한 축을 0 이나 평균으로 채우면 레이더가 거짓말을 한다. 빈 축은
+   점선으로 남기고 "재보면 채워진다"고 말한다. 유형 4축은 레이더에 넣지 않는다 —
+   레이더는 "클수록 좋다"로 읽히는데 유형은 방향이라 좋고 나쁨이 없다. */
+window.ChumCard=(function(){
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const GRADES=["A","B","C","D","E"];
+const GRADE_TXT={A:"선출·마스터즈 상위",B:"동호회 상급",C:"중급",D:"초중급",E:"초급"};
+const CONF_TXT={verified:"검증됨",self:"자기신고",derived:"추정",unknown:"미확인"};
+const SIDE_TXT={"短":"짧고 세게","長":"길고 꾸준히","記":"기록","健":"컨디션",
+  "計":"계획","流":"즉흥","獨":"혼자","同":"같이"};
+
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const secOf=x=>(x&&typeof x==="object"&&typeof x.sec==="number"&&isFinite(x.sec)&&x.sec>0)?x.sec:null;
+// 작을수록 좋은 기록 → 0~100. 스케일 양 끝은 답변 선택지·등급표에서 왔다.
+const inv=(bad,good,s)=>clamp(Math.round((bad-s)/(bad-good)*100),4,100);
+const stepMap=(v,pairs)=>{for(const [lo,pct] of pairs) if(v>=lo) return pct; return null;};
+
+// 육각 축 — 전부 "크기" 지표다. 값은 실제 답에서만 나온다.
+const DIMS=[
+ {n:"페이스", hint:"100m 자유형",
+  val:p=>{const s=secOf(p.free100);return s==null?null:inv(220,75,s);},
+  ask:"100m 기록을 재보면"},
+ {n:"스피드", hint:"50m 최고",
+  val:p=>{const s=secOf(p.free50);return s==null?null:inv(65,28,s);},
+  ask:"50m 를 재보면"},
+ {n:"지구력", hint:"쉬지 않고",
+  val:p=>{const m=p.continuous_m;
+    return (typeof m==="number"&&isFinite(m)&&m>=0)?stepMap(m,[[800,90],[400,65],[100,35],[50,15],[0,6]]):null;},
+  ask:"쉬지 않고 얼마나 가는지 알려주면"},
+ {n:"볼륨", hint:"한 세션",
+  val:p=>{const m=p.session_m;
+    return (typeof m==="number"&&isFinite(m)&&m>0)?stepMap(m,[[3000,95],[2000,75],[1500,55],[800,30],[1,18]]):null;},
+  ask:"세션 거리를 알려주면"},
+ {n:"영법 폭", hint:"되는 영법",
+  val:p=>{const st=p.strokes;
+    if(!st||typeof st!=="object"||!Object.keys(st).length) return null;
+    const n=["free","back","breast","fly"].filter(k=>st[k]==="ok").length;
+    return n?n*25:6;},
+  ask:"영법을 알려주면"},
+ {n:"수력", hint:"배운 기간",
+  val:p=>{const y=p.years;
+    return (typeof y==="number"&&isFinite(y)&&y>0)?stepMap(y,[[72,100],[36,75],[18,50],[1,25]]):null;},
+  ask:"수력을 알려주면"},
+];
+
+function hexSVG(p){
+  const CX=170,CY=152,R=96,LR=124;
+  const pt=(i,r)=>{const a=-Math.PI/2+i*Math.PI/3;
+    return [CX+r*Math.cos(a),CY+r*Math.sin(a)];};
+  const vals=DIMS.map(d=>d.val(p));
+  let grid="";
+  for(const f of [.33,.66,1])
+    grid+=`<polygon class="hexgrid" points="${DIMS.map((_,i)=>pt(i,R*f).map(v=>v.toFixed(1)).join(",")).join(" ")}"/>`;
+  let spokes="",labels="",dots="";
+  vals.forEach((v,i)=>{
+    const [ex,ey]=pt(i,R), [lx,ly]=pt(i,LR);
+    const unk=v==null;
+    spokes+=`<line class="hexspoke${unk?" unk":""}" x1="${CX}" y1="${CY}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}"/>`;
+    const anchor=Math.abs(lx-CX)<8?"middle":(lx>CX?"start":"end");
+    labels+=`<text class="hexlab${unk?" unk":""}" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anchor}">${esc(DIMS[i].n)}</text>`
+      +`<text class="hexval" x="${lx.toFixed(1)}" y="${(ly+12).toFixed(1)}" text-anchor="${anchor}">${unk?"미확인":esc(DIMS[i].hint)}</text>`;
+    if(!unk){const [dx,dy]=pt(i,R*v/100);
+      // 아는 축은 중심에서 값까지 줄기를 세운다 — 다각형이 없어도 크기가 읽힌다
+      dots+=`<line class="hexstem" x1="${CX}" y1="${CY}" x2="${dx.toFixed(1)}" y2="${dy.toFixed(1)}"/>`
+        +`<circle class="hexdot" cx="${dx.toFixed(1)}" cy="${dy.toFixed(1)}" r="3.4"/>`;}
+  });
+  // 다각형은 **여섯 축이 다 있을 때만.** 모르는 축을 건너뛰고 직선으로 이으면
+  // 그 선이 지나는 자리가 "그 축의 값"처럼 읽힌다 — 비운 걸 채워 그리는 셈이다.
+  const known=vals.map((v,i)=>v==null?null:pt(i,R*v/100)).filter(Boolean);
+  const poly=known.length===DIMS.length
+    ? `<polygon class="hexpoly" points="${known.map(q=>q.map(v=>v.toFixed(1)).join(",")).join(" ")}"/>`
+    : "";
+  return {svg:`<svg viewBox="0 0 340 304" role="img" aria-label="수영 능력 육각형">
+      ${grid}${spokes}${poly}${dots}${labels}</svg>`,
+    missing:DIMS.filter((d,i)=>vals[i]==null)};
+}
+
+function laneSVG(p){
+  const X0=26,X1=494,Y=46,W=(X1-X0)/5;
+  const order=["E","D","C","B","A"];           // 오른쪽으로 갈수록 빠르다
+  const gi=order.indexOf(p.grade);
+  let bands="",ticks="";
+  order.forEach((g,i)=>{
+    const x=X0+i*W;
+    bands+=`<rect class="laneband${g===p.grade?" on":""}" x="${x}" y="${Y-16}" width="${W-2}" height="32" rx="4"/>`;
+    ticks+=`<text class="lanetick${g===p.grade?" on":""}" x="${x+W/2}" y="${Y-24}" text-anchor="middle">${g}</text>`
+      +`<text class="lanename" x="${x+W/2}" y="${Y+34}" text-anchor="middle">${esc(GRADE_TXT[g])}</text>`;
+  });
+  let me="";
+  if(gi>=0){
+    let x=X0+gi*W+W/2;
+    if(p.grade_step==="+") x+=W*.22;           // 반칸 — verified 만 갖는 해상도
+    if(p.grade_step==="-") x-=W*.22;
+    me=`<circle class="laneme${p.grade_confidence==="derived"?" derived":""}" cx="${x.toFixed(1)}" cy="${Y}" r="8"/>`;
+  }
+  return `<svg viewBox="0 0 520 92" role="img" aria-label="등급 레인">
+    <line class="lanerope" x1="${X0}" y1="${Y-19}" x2="${X1}" y2="${Y-19}"/>
+    <line class="lanerope" x1="${X0}" y1="${Y+19}" x2="${X1}" y2="${Y+19}"/>
+    ${bands}${ticks}${me}</svg>`;
+}
+
+function axisBars(p){
+  const DEF=[
+    ["distance","短","長"],["purpose","記","健"],["method","計","流"],["social","獨","同"],
+  ];
+  return DEF.map(([k,L,R])=>{
+    const a=(p.axes||{})[k]||{side:null,strength:"반반"};
+    const dim=a.side==null;
+    let pos=50, half="";
+    if(!dim){
+      const off=a.strength==="뚜렷"?38:22;
+      pos=a.side===L?50-off:50+off;
+    }else half=" half";
+    return `<div class="axisbar${dim?" dim":""}">
+      <span class="al"><b>${esc(L)}</b> ${esc(SIDE_TXT[L])}</span>
+      <div class="track"><span class="mid"></span><i class="${half.trim()}" style="left:${pos}%"></i></div>
+      <span class="ar"><b>${esc(R)}</b> ${esc(SIDE_TXT[R])}</span>
+    </div>`;
+  }).join("");
+}
+
+function open(){
+  const app=$("cardapp");
+  let p=null;
+  try{ p=JSON.parse(localStorage.getItem("cbd.profile")); }catch(_){}
+  if(!p||typeof p!=="object"||Array.isArray(p)){
+    app.innerHTML=`<div class="mcard"><h2>내 카드</h2>
+      <p style="margin:0;font-size:14.5px;line-height:1.65">아직 그릴 게 없어요.
+      프로파일을 만들면 여기에 <b>수영 카드</b>가 생깁니다 — 아는 것만 그리고,
+      모르는 축은 모른다고 그립니다.</p>
+      <a class="cta" href="#profile">3분 프로파일 만들기 →</a></div>`;
+    return;
+  }
+  const hex=hexSVG(p);
+  const known=GRADES.indexOf(p.grade)>=0;
+  const typed=!!p.typed_at;
+  app.innerHTML=`
+  <div class="mcard">
+    <div class="cardhead">
+      <span class="big${known?"":" unk"}">${known?esc(p.grade+(p.grade_step||"")):"등급 미확인"}</span>
+      <span class="who">${known?esc(GRADE_TXT[p.grade]):"100m 자유형을 재보면 등급이 나옵니다"}
+        ${known?`<br><span class="conf ${esc(p.grade_confidence)}">${esc(CONF_TXT[p.grade_confidence]||p.grade_confidence)}</span>`:""}
+        ${p.volume?` <span class="conf">${esc(p.volume)}${p.session_m?` · ${esc(p.session_m.toLocaleString())}m/세션`:""}</span>`:""}
+      </span>
+    </div>
+    <div class="gradelane">${known?laneSVG(p):""}</div>
+  </div>
+
+  <div class="mcard"><h2>능력 — 아는 것만 그렸습니다</h2>
+    <div class="hexwrap">${hex.svg}</div>
+    ${hex.missing.length?`<p class="cardnote">점선 축은 아직 모르는 것: ${
+      hex.missing.map(d=>`${esc(d.n)}(${esc(d.ask)})`).join(", ")}. 채우면 다각형이 커집니다 — 틀리게 채우는 것보다 비워두는 게 낫습니다.</p>`:""}
+  </div>
+
+  <div class="mcard"><h2>방향 — 좋고 나쁨이 없습니다</h2>
+    ${typed?axisBars(p):`<p class="hint" style="margin:0">유형 질문을 아직 안 했어요. 5문항이면 나옵니다.</p>`}
+    ${typed&&p.type_code?`<p class="cardnote"><b style="color:var(--ink)">${esc(p.type_code)}</b>${
+      p.social_tag?` · ${esc(p.social_tag)}`:""} — 매칭에서 등급을 올려주지도 내려주지도 않는 축입니다. 가운데 빈 점은 아직 안 갈린 축.</p>`:""}
+  </div>
+
+  <div class="acts" style="margin-top:14px">
+    <a class="cta" href="#match" style="margin-top:0">이 카드로 첨벙 모으기 →</a>
+    <a class="cta" href="#profile" style="margin-top:0;background:#fff;color:var(--water);border:1.5px solid var(--water)">${typed?"프로파일 다시 하기":"유형 이어하기"} →</a>
+  </div>
+  <p class="cardnote">${p.updated_at?`마지막 갱신 ${esc(p.updated_at)}. `:""}유형은 3개월마다 다시 묻습니다 — 사람은 바뀌니까요.</p>`;
+}
+return {open};
+})();
+
+/* ── 해시 라우터 — 지도부터 모으기까지 한 페이지 ── */
+(function(){
+  const VIEWS=["map","profile","card","match"];
+  function show(name){
+    if(VIEWS.indexOf(name)<0) name="map";
+    VIEWS.forEach(v=>{
+      const el=document.getElementById("view-"+v);
+      if(el) el.hidden=v!==name;
+    });
+    document.querySelectorAll(".tabs .tab").forEach(t=>
+      t.classList.toggle("on",t.dataset.v===name));
+    if(name==="profile") ChumProfile.init();
+    if(name==="card") ChumCard.open();
+    if(name==="match") ChumMatch.open();
+    window.scrollTo(0,0);
+  }
+  addEventListener("hashchange",()=>show(location.hash.slice(1)||"map"));
+  show(location.hash.slice(1)||"map");
+})();
+</script>
